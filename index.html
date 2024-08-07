@@ -43,40 +43,19 @@
             background-color: #ffffff;
             border-radius: 16px;
             margin: 15px;
-            width: 300px;
-            height: 400px;
+            width: 620px; /* Increased width to accommodate merging of two cards */
+            height: 450px; /* Increased height to accommodate merging of two cards */
             display: inline-block;
             vertical-align: top;
             position: relative;
             overflow: hidden;
             border: 1px solid #ddd;
-            flex: 1 0 280px;
+            flex: 1 0 600px; /* Adjusted flex basis */
             max-width: 98%;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .card1 {
-            background: linear-gradient(90deg, rgba(255, 100, 100, 1) 0%, rgba(255, 200, 100, 1) 100%);
-            border-radius: 16px;
-            margin: 15px;
-            width: 300px;
-            height: 400px;
-            display: inline-block;
-            vertical-align: top;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid #ddd;
-            flex: 1 0 280px;
-            min-width: 50%;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .card1:hover {
             transform: translateY(-10px);
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
         }
@@ -186,12 +165,21 @@
                 flex-basis: calc(50% - 30px);
                 max-width: calc(50% - 30px);
             }
+
+            .card {
+                width: 100%;
+                height: 400px; /* Adjusted height for smaller screens */
+            }
         }
 
         @media screen and (max-width: 480px) {
             .card, .card-support, .card-kids {
                 flex-basis: 100%;
                 max-width: 100%;
+            }
+
+            .card {
+                height: 350px; /* Adjusted height for even smaller screens */
             }
         }
     </style>
@@ -202,16 +190,10 @@
     <div class="content">
         <div class="container">
             <div class="card">
-                <div class="card-content">
-                    <h1>Tudify <b><i>Cloud</i></b></h1>
-                    <p>Empowering your business with the cloud.</p>
-                </div>
-            </div>
-            <div class="card1">
                 <a href="/CloudStorage" aria-label="view info about Tudify Cloud Storage">
                     <div class="card-content">
-                        <h1>Cloud Storage</h1>
-                        <p>Store your data securely and access it anywhere.</p>
+                        <h1>Tudify <b><i>Cloud</i></b> & Storage</h1>
+                        <p>Empowering your business with the cloud and secure data storage.</p>
                     </div>
                 </a>
             </div>
