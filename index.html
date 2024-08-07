@@ -1,130 +1,251 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tudify Cloud</title>
+    <meta name="description" content="Cloud solutions for modern businesses.">
+    <meta name="image" content="/images/Tudify%20Cloud.ico">
+    <link rel="icon" type="image/x-icon" href="/images/Tudify%20Cloud.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="https://tudify.co.uk/icon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@700&display=swap" rel="stylesheet">
+    <meta name="keywords" content="Tudify Cloud, cloud computing, cloud storage, cloud solutions, cloud technology, cloud services, business cloud">
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        html, body {
+            height: 100%;
             margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
+            font-family: 'DM Sans', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
         }
 
-        header {
-            background-color: #333;
-            color: white;
-            padding: 1rem 0;
-            text-align: center;
+        body {
+            display: flex;
+            flex-direction: column;
         }
 
-        nav ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        nav ul li {
-            display: inline;
-            margin: 0 10px;
-        }
-
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
+        .content {
+            flex: 1;
+            padding: 20px;
         }
 
         .container {
-            width: 80%;
-            margin: 0 auto;
-            overflow: hidden;
-        }
-
-        #showcase {
-            background: #333 url('https://via.placeholder.com/1200x400') no-repeat center center/cover;
-            color: white;
-            height: 400px;
-            text-align: center;
             display: flex;
-            flex-direction: column;
+            flex-wrap: wrap;
             justify-content: center;
+            margin-bottom: 20px;
         }
 
-        #showcase h1 {
-            font-size: 3rem;
-            margin-bottom: 0;
+        .card {
+            background-color: #e0e0e0;
+            border-radius: 16px;
+            margin: 10px;
+            width: 320px;
+            height: 450px;
+            display: inline-block;
+            vertical-align: top;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            flex: 1 0 300px;
+            max-width: 98%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        #showcase p {
-            font-size: 1.5rem;
-            margin-top: 0;
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
 
-        #about, #services {
-            padding: 2rem 0;
-            text-align: center;
+        .card1 {
+            background: linear-gradient(90deg, rgba(0, 204, 255, 1) 0%, rgba(0, 204, 128, 1) 100%);
+            border-radius: 16px;
+            margin: 10px;
+            width: 320px;
+            height: 450px;
+            display: inline-block;
+            vertical-align: top;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            flex: 1 0 300px;
+            min-width: 50%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        #about h2, #services h2 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
+        .card1:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-support {
+            background: linear-gradient(135deg, rgba(0, 123, 255, 1) 0%, rgba(229, 229, 229, 1) 100%);
+            border-radius: 16px;
+            margin: 10px;
+            width: 320px;
+            height: 450px;
+            display: inline-block;
+            vertical-align: top;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            flex: 1 0 300px;
+            max-width: 98%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card-support:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-kids {
+            background: linear-gradient(135deg, red, orange, yellow, green, blue, indigo, violet);
+            background-size: 600% 600%;
+            animation: gradientAnimation 10s ease infinite;
+            border-radius: 16px;
+            margin: 10px;
+            width: 320px;
+            height: 450px;
+            display: inline-block;
+            vertical-align: top;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            flex: 1 0 300px;
+            max-width: 98%;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.7); /* White shadow */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .card-content {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            text-align: left;
+            color: #333;
+            z-index: 1;
+        }
+
+        .card-content h1,
+        .card-content h3,
+        .card-content p,
+        .card-content a {
+            margin: 0;
+            color: #333;
+            text-decoration: none;
         }
 
         .footer {
-            background-color: #333;
-            color: white;
+            width: 96%;
+            padding: 20px;
+            background-color: #e0e0e0;
+            border-radius: 16px;
+            margin: 10px;
             text-align: center;
-            padding: 1rem 0;
+        }
+
+        .footer a {
+            color: #007acc;
+            text-decoration: none;
+        }
+
+        .footer h3 {
+            margin: 10px 0;
+        }
+
+        .menu-button {
             position: fixed;
-            bottom: 0;
-            width: 100%;
+            top: 20px;
+            right: 20px;
+            background-color: #007acc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+            z-index: 1000;
+            transition: background-color 0.3s ease;
+        }
+
+        .menu-button:hover {
+            background-color: #005f99;
+        }
+
+        @media screen and (max-width: 768px) {
+            .card, .card-support, .card-kids {
+                flex-basis: calc(50% - 20px);
+                max-width: calc(50% - 20px);
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .card, .card-support, .card-kids {
+                flex-basis: 100%;
+                max-width: 100%;
+            }
         }
     </style>
 </head>
+
 <body>
-    <header>
+    <a href="https://tudify.co.uk/menu" class="menu-button">Menu</a>
+    <div class="content">
         <div class="container">
-            <h1>Tudify Cloud</h1>
-            <nav>
-                <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </nav>
+            <div class="card">
+                <div class="card-content">
+                    <h1>Tudify <b><i>Cloud</i></b></h1>
+                    <p>Empowering your business with the cloud.</p>
+                </div>
+            </div>
+            <div class="card1">
+                <a href="/CloudStorage" aria-label="view info about Tudify Cloud Storage">
+                    <div class="card-content">
+                        <h1>Cloud Storage</h1>
+                        <p>Store your data securely and access it anywhere.</p>
+                    </div>
+                </a>
+            </div>
         </div>
-    </header>
-
-    <section id="showcase">
+    </div>
+    <div class="content">
         <div class="container">
-            <h1>Welcome to Tudify Cloud</h1>
-            <p>Your gateway to seamless cloud solutions</p>
+            <div class="card-support">
+                <div class="card-content">
+                    <a href="/support" aria-label="Go to support">
+                        <h1>Support</h1>
+                        <p>Get help with your cloud services anytime, anywhere.</p>
+                    </a>
+                </div>
+            </div>
+            <div class="card-kids">
+                <div class="card-content">
+                    <a href="/security" aria-label="Go to cloud security">
+                        <h1>Cloud Security</h1>
+                        <p>Ensuring your data is safe with top-notch security.</p>
+                    </a>
+                </div>
+            </div>
         </div>
-    </section>
-
-    <section id="about">
-        <div class="container">
-            <h2>About Us</h2>
-            <p>Tudify Cloud provides state-of-the-art cloud services, designed to help your business scale and grow with the latest in cloud technology.</p>
-        </div>
-    </section>
-
-    <section id="services">
-        <div class="container">
-            <h2>Our Services</h2>
-            <p>From cloud storage to advanced computing solutions, Tudify Cloud offers a range of services tailored to meet your needs.</p>
-        </div>
-    </section>
-
-    <footer class="footer">
-        <p>&copy; 2024 Tudify Cloud. All rights reserved.</p>
-    </footer>
-
-    <script>
-        // JavaScript can be added here for interactivity if needed
-        // For example, smooth scrolling, form validation, etc.
-    </script>
+    </div>
+    <div class="footer">
+        <h1>Tudify Cloud</h1>
+        <a href="mailto:support@tudify.co.uk">
+            <h3>Email us</h3>
+        </a>
+    </div>
 </body>
+
 </html>
