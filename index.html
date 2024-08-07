@@ -18,7 +18,7 @@
             height: 100%;
             margin: 0;
             font-family: 'DM Sans', sans-serif;
-            background-color: #f5f5f5;
+            background-color: #f0f2f5;
             color: #333;
         }
 
@@ -40,91 +40,87 @@
         }
 
         .card {
-            background-color: #e0e0e0;
+            background-color: #ffffff;
             border-radius: 16px;
-            margin: 10px;
-            width: 320px;
-            height: 450px;
+            margin: 15px;
+            width: 300px;
+            height: 400px;
             display: inline-block;
             vertical-align: top;
             position: relative;
             overflow: hidden;
-            border: none;
-            flex: 1 0 300px;
+            border: 1px solid #ddd;
+            flex: 1 0 280px;
             max-width: 98%;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
         }
 
         .card1 {
-            background: linear-gradient(90deg, rgba(0, 204, 255, 1) 0%, rgba(0, 204, 128, 1) 100%);
+            background: linear-gradient(90deg, rgba(255, 100, 100, 1) 0%, rgba(255, 200, 100, 1) 100%);
             border-radius: 16px;
-            margin: 10px;
-            width: 320px;
-            height: 450px;
+            margin: 15px;
+            width: 300px;
+            height: 400px;
             display: inline-block;
             vertical-align: top;
             position: relative;
             overflow: hidden;
-            border: none;
-            flex: 1 0 300px;
+            border: 1px solid #ddd;
+            flex: 1 0 280px;
             min-width: 50%;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .card1:hover {
             transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
         }
 
         .card-support {
-            background: linear-gradient(135deg, rgba(0, 123, 255, 1) 0%, rgba(229, 229, 229, 1) 100%);
+            background: linear-gradient(135deg, rgba(0, 150, 255, 1) 0%, rgba(100, 220, 255, 1) 100%);
             border-radius: 16px;
-            margin: 10px;
-            width: 320px;
-            height: 450px;
+            margin: 15px;
+            width: 300px;
+            height: 400px;
             display: inline-block;
             vertical-align: top;
             position: relative;
             overflow: hidden;
-            border: none;
-            flex: 1 0 300px;
+            border: 1px solid #ddd;
+            flex: 1 0 280px;
             max-width: 98%;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .card-support:hover {
             transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
         }
 
         .card-kids {
-            background: linear-gradient(135deg, red, orange, yellow, green, blue, indigo, violet);
-            background-size: 600% 600%;
-            animation: gradientAnimation 10s ease infinite;
+            background: linear-gradient(135deg, #ff4e50, #f9d423);
             border-radius: 16px;
-            margin: 10px;
-            width: 320px;
-            height: 450px;
+            margin: 15px;
+            width: 300px;
+            height: 400px;
             display: inline-block;
             vertical-align: top;
             position: relative;
             overflow: hidden;
-            border: none;
-            flex: 1 0 300px;
+            border: 1px solid #ddd;
+            flex: 1 0 280px;
             max-width: 98%;
-            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.7); /* White shadow */
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        @keyframes gradientAnimation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .card-kids:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
         }
 
         .card-content {
@@ -149,10 +145,11 @@
         .footer {
             width: 96%;
             padding: 20px;
-            background-color: #e0e0e0;
+            background-color: #ffffff;
             border-radius: 16px;
             margin: 10px;
             text-align: center;
+            border: 1px solid #ddd;
         }
 
         .footer a {
@@ -186,8 +183,8 @@
 
         @media screen and (max-width: 768px) {
             .card, .card-support, .card-kids {
-                flex-basis: calc(50% - 20px);
-                max-width: calc(50% - 20px);
+                flex-basis: calc(50% - 30px);
+                max-width: calc(50% - 30px);
             }
         }
 
