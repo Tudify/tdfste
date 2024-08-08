@@ -15,11 +15,11 @@
     <meta name="title" content="Tudify - menu">
     <style>
         body {
-            background-color: #f4f4f4; /* Light grey background */
+            background-color: #f4f4f4;
             font-family: 'DM Sans', sans-serif;
             margin: 0;
             padding: 0;
-            color: #333; /* Dark grey text color for better readability */
+            color: #333;
         }
 
         a {
@@ -71,7 +71,7 @@
             flex-direction: column;
             justify-content: space-between;
             position: relative;
-            color: #333; /* Dark grey text color for readability */
+            color: #333;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
@@ -87,7 +87,7 @@
 
         .card-description {
             font-size: 16px;
-            color: #666; /* Lighter grey for the description */
+            color: #666;
         }
 
         .card-description1 {
@@ -124,9 +124,17 @@
         }
 
         @keyframes gradientAnimation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         @media screen and (max-width: 768px) {
@@ -138,7 +146,8 @@
                 font-size: 20px;
             }
 
-            .card-description, .card-description1 {
+            .card-description,
+            .card-description1 {
                 font-size: 14px;
             }
         }
@@ -152,7 +161,8 @@
                 font-size: 18px;
             }
 
-            .card-description, .card-description1 {
+            .card-description,
+            .card-description1 {
                 font-size: 12px;
             }
         }
@@ -172,7 +182,6 @@
     <a href="https://tudify.co.uk/" class="menu-button">Close</a>
 
     <div class="content">
-        <div class="card">
         <div class="card card1">
             <a href="/support">
                 <div class="card-title">Support</div>
@@ -187,7 +196,7 @@
         </div>
         <div class="card card-kids">
             <a href="#">
-                <div class="card-title">Tudify cloud deployment </div>
+                <div class="card-title">Tudify cloud deployment</div>
                 <div class="card-description1">unleash your inner dev with epic management.</div>
             </a>
         </div>
