@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luna AI Beta</title>
+    <link rel="icon" href="https://tudify.co.uk/Luna-AI/luna-ai.ico" type="image/x-icon">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ver{
+              height: 5%;
+              text-align: center;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 95%;
+            max-width: 100%;
+        }
+
+        .response {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 75%;
+            word-wrap: break-word;
+            display: inline-block;
+            margin: 5px 0;
+        }
+
+        .message.user {
+            background-color: #d1e7dd;
+            align-self: flex-end;
+            border-radius: 10px 10px 0 10px;
+            animation: slideInRight 0.5s ease-out;
+        }
+
+        .message.ai {
+            background-color: #e2e3e5;
+            align-self: flex-start;
+            border-radius: 10px 10px 10px 0;
+            animation: slideInLeft 0.5s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .input-container {
+            padding: 10px;
+            background-color: #fff;
+            display: inline-block;
+        }
+
+        input[type="text"] {
+            width: 78%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width:18%;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="ver">
+           <h3> Luna Basic </h3>
+    </div>
+    <div class="container">
+        <div class="response" id="response">
+            <!-- Messages will be displayed here -->
+        </div>
+        <div class="input-container">
+            <input type="text" id="query" placeholder="Message Luna...">
+            <button onclick="fetchInfo()">➔</button>
+        </div>
+    </div>
+
+    <script>
+        const responses = {
+            'tudify': "Tudify is a British tech company that specializes in web apps and browsers. They stopped making hardware in 2023.",
+            'tudify website': "Tudify's website has been Tudify.co.uk since October 2023.",
+            'what is pears website': "pear's is called pearweb. The latest version I'm aware of is PearWeb 19.",
+            'what is tudifys website': "Tudify's website has been Tudify.co.uk since October 2023.",
+            'pear website': "pear's is called pearweb. The latest version I'm aware of is PearWeb 19.",
+            'what is pearweb': "PearWeb 19 is a portal to all things pear, like PearPortal or PearBooks.",
+            'pearweb': "PearWeb 19 is a portal to all things pear, like PearPortal or PearBooks.",
+            'website about cats': "I can't code your website directly, but I can tell you some things. To make a header, use <h1>. This can go down to <h6>, and for a paragraph you can use <p>. To close these, use </p> or </h1>. Also, to start your file use <html>.",
+            'website about dogs': "I can't code your website directly, but I can tell you some things. To make a header, use <h1>. This can go down to <h6>, and for a paragraph you can use <p>. To close these, use </p> or </h1>. Also, to start your file use <html>.",
+            'website for my company': "I can't code your website directly, but I can tell you some things. To make a header, use <h1>. This can go down to <h6>, and for a paragraph you can use <p>. To close these, use </p> or </h1>. Also, to start your file use <html>.",
+            'who are you': "Hey there👋 I'm Luna, your personal assistant. How can I help?",
+            'who made you': "Tudify created me in 2024.",
+            'summarise the book 1984': "1984 by George Orwell is a dystopian novel set in a totalitarian society led by the omnipresent Big Brother. The story follows Winston Smith, who works for the Ministry of Truth, altering historical records. Discontent with the regime, Winston begins a forbidden relationship with Julia.",
+            'summarise 1984': "1984 by George Orwell is a dystopian novel set in a totalitarian society led by the omnipresent Big Brother. The story follows Winston Smith, who works for the Ministry of Truth, altering historical records. Discontent with the regime, Winston begins a forbidden relationship with Julia.",
+            '': "Hey there👋 I`m Luna, your personal assistant. You appear to have typed nothing. How can I help?",
+            'hi': "Hey there👋 how can I help?",
+            'hello': "Hey there👋 how can I help?",
+            'whats the weather': "I don't have access to real time info yet, check bbc.com/weather to find out the weather",
+            'whats 1+1?': "2",
+            'whats 1+1': "2",
+            'sign me up to disney+': "I can't do that directly, so go to Disneyplus.com",
+            'sign me up to netflix': "I can't do that directly, so go to netflix.com",
+            'what time is it': "I don't have access to real-time data. Please check your device's clock.",
+            'what is the weather': "I don't have access to real-time weather information. Please check a weather website or app.",
+            'tell me a joke': "Why don't scientists trust atoms? Because they make up everything!",
+            'what is your name': "I'm Luna, your personal assistant.",
+            'how are you': "I'm just a program, so I don't have feelings, but thanks for asking!",
+            'what can you do': "I can answer questions, provide information, and offer assistance based on predefined responses.",
+            'who is the president': "I don't have real-time information on current events. Please check a reliable news source.",
+            'what is the capital of france': "The capital of France is Paris.",
+            'how old are you': "I don't have an age, as I'm a program created in 2024.",
+            'tell me a fact': "Did you know that honey never spoils? Archaeologists have found pots of honey in ancient Egyptian tombs that are over 3,000 years old and still edible!",
+            'who is the ceo of apple': "As of 2024, the CEO of Apple Inc. is Tim Cook.",
+            'how do you work': "I use predefined responses and simple algorithms to provide information based on your queries.",
+            'what is the square root of 16': "The square root of 16 is 4.",
+            'convert 100 dollars to euros': "I can't access real-time exchange rates. Please use a currency converter for the latest rates.",
+            'what is the largest ocean': "The largest ocean on Earth is the Pacific Ocean.",
+            'how many continents are there': "There are 7 continents: Africa, Antarctica, Asia, Europe, North America, Australia, and South America.",
+            'who wrote to kill a mockingbird': "The novel 'To Kill a Mockingbird' was written by Harper Lee.",
+            'what is the boiling point of water': "The boiling point of water is 100°C (212°F) at standard atmospheric pressure.",
+            'what is the speed of light': "The speed of light in a vacuum is approximately 299,792 kilometers per second (km/s).",
+            'what is the tallest mountain': "The tallest mountain on Earth is Mount Everest, standing at 8,848 meters (29,029 feet) above sea level.",
+            'who painted the mona lisa': "The Mona Lisa was painted by Leonardo da Vinci.",
+            'what is the smallest planet': "The smallest planet in our solar system is Mercury.",
+            'how many bones are in the human body': "An adult human body has 206 bones.",
+            'who discovered penicillin': "Penicillin was discovered by Alexander Fleming in 1928.",
+            'what is the chemical symbol for gold': "The chemical symbol for gold is Au.",
+            'what is the distance from the earth to the moon': "The average distance from the Earth to the Moon is about 384,400 kilometers (238,855 miles).",
+            'who invented the telephone': "The telephone was invented by Alexander Graham Bell.",
+            'what is the largest planet in the solar system': "The largest planet in our solar system is Jupiter.",
+            'who wrote hamlet': "The play 'Hamlet' was written by William Shakespeare.",
+            'what is the currency of japan': "The currency of Japan is the Japanese yen (JPY).",
+            'how many states are in the usa': "There are 50 states in the United States of America.",
+            'what is the fastest land animal': "The fastest land animal is the cheetah, capable of reaching speeds up to 70 miles per hour (113 kilometers per hour).",
+            'how many players are on a soccer team': "Each soccer team has 11 players on the field.",
+            'what is the longest river in the world': "The longest river in the world is the Nile River, approximately 6,650 kilometers (4,130 miles) long.",
+            'who is the author of harry potter': "The author of the 'Harry Potter' series is J.K. Rowling.",
+            'what is the tallest building in the world': "The tallest building in the world is the Burj Khalifa in Dubai, standing at 828 meters (2,717 feet).",
+            'who was the first man on the moon': "The first man on the Moon was Neil Armstrong.",
+            'what is the largest animal on earth': "The largest animal on Earth is the blue whale.",
+            'how many planets are in the solar system': "There are 8 planets in the solar system.",
+            'what is the smallest country in the world': "The smallest country in the world by land area is Vatican City.",
+            'who is known as the father of modern physics': "Albert Einstein is known as the father of modern physics.",
+            'what is the main ingredient in guacamole': "The main ingredient in guacamole is avocado.",
+            'how many teeth does an adult human have': "An adult human typically has 32 teeth.",
+            'what is the capital of italy': "The capital of Italy is Rome.",
+            'who wrote the odyssey': "The Odyssey was written by Homer.",
+            'what is the hardest natural substance on earth': "The hardest natural substance on Earth is diamond.",
+            'what is the chemical symbol for silver': "The chemical symbol for silver is Ag.",
+            'who was the first president of the united states': "The first President of the United States was George Washington.",
+            'what is the largest desert in the world': "The largest desert in the world is the Antarctic Desert.",
+            'who painted the last supper': "The Last Supper was painted by Leonardo da Vinci.",
+            'what is the formula for water': "The chemical formula for water is H2O.",
+            'what is the deepest ocean': "The deepest part of the world's oceans is the Mariana Trench.",
+            'how many galaxies are there': "There are estimated to be over 100 billion galaxies in the observable universe.",
+            'who is the current queen of england': "As of 2024, the current monarch of the United Kingdom is King Charles III.",
+            'what is the chemical symbol for helium': "The chemical symbol for helium is He.",
+            'who discovered america': "Christopher Columbus is credited with discovering America in 1492.",
+            'what is the most spoken language in the world': "The most spoken language in the world by number of native speakers is Mandarin Chinese.",
+            'who was the first woman to win a nobel prize': "Marie Curie was the first woman to win a Nobel Prize.",
+            'what is the most abundant gas in earth\'s atmosphere': "The most abundant gas in Earth's atmosphere is nitrogen.",
+            'who wrote the iliad': "The Iliad was written by Homer.",
+            'what is the primary language spoken in brazil': "The primary language spoken in Brazil is Portuguese.",
+            'what is the hardest mineral': "The hardest mineral is diamond.",
+            'what is the longest running television show': "The longest-running television show is 'Meet the Press,' which has been on air since 1947.",
+            'who is the author of the great gatsby': "The author of 'The Great Gatsby' is F. Scott Fitzgerald.",
+            'what is the hottest planet in the solar system': "The hottest planet in the solar system is Venus.",
+            'what is the smallest mammal': "The smallest mammal by length is the bumblebee bat.",
+            'who painted starry night': "The painting 'Starry Night' was created by Vincent van Gogh.",
+            'what is the chemical formula for table salt': "The chemical formula for table salt is NaCl.",
+            'who was the first man to climb mount everest': "Sir Edmund Hillary and Tenzing Norgay were the first to successfully climb Mount Everest.",
+            'what is the capital of australia': "The capital of Australia is Canberra.",
+            'who was the first woman in space': "Valentina Tereshkova was the first woman in space.",
+            'what is the most populated city in the world': "The most populated city in the world is Tokyo, Japan.",
+            'what is the largest species of shark': "The largest species of shark is the whale shark.",
+            'who wrote pride and prejudice': "The author of 'Pride and Prejudice' is Jane Austen.",
+            'what is the fastest animal in the ocean': "The fastest animal in the ocean is the sailfish.",
+            'who invented the lightbulb': "Thomas Edison is commonly credited with inventing the practical electric lightbulb.",
+            'what is the longest river in africa': "The longest river in Africa is the Nile River.",
+            'who was the 16th president of the united states': "Abraham Lincoln was the 16th President of the United States.",
+            'what is the currency of india': "The currency of India is the Indian Rupee (INR).",
+            'who wrote les miserables': "The author of 'Les Misérables' is Victor Hugo.",
+            'what is the tallest statue in the world': "The tallest statue in the world is the Statue of Unity in India.",
+            'what is the chemical symbol for iron': "The chemical symbol for iron is Fe.",
+            'history of the united states': "The United States of America was founded in 1776, following the Declaration of Independence from Britain. It has a rich history including the Civil War, the Civil Rights Movement, and its role in global conflicts such as World Wars I and II.",
+            'history of the united kingdom': "The United Kingdom has a long history that includes the formation of the English monarchy, the union of Scotland and England in 1707, and its role in the British Empire. Key events include the Industrial Revolution and World War II.",
+            'what was the cold war': "The Cold War was a period of geopolitical tension between the Soviet Union and the United States, along with their respective allies, from the end of World War II until the collapse of the Soviet Union in 1991.",
+            'what was the berlin wall': "The Berlin Wall was a barrier constructed by the German Democratic Republic (East Germany) that divided East and West Berlin from 1961 to 1989. It was a symbol of the Cold War and the division between the communist East and the capitalist West.",
+            'who was winston churchill': "Winston Churchill was the Prime Minister of the United Kingdom during World War II. He is known for his leadership and speeches that inspired British morale during the war.",
+            'what was the vietnam war': "The Vietnam War was a conflict in Southeast Asia that lasted from 1955 to 1975, involving North Vietnam and its communist allies against South Vietnam and its principal ally, the United States. It ended with the fall of Saigon and the reunification of Vietnam.",
+            'who was napoleon bonaparte': "Napoleon Bonaparte was a French military leader and emperor who rose to prominence during the French Revolution and its associated wars. He became Emperor of the French in 1804 and led France through the Napoleonic Wars until his defeat in 1815.",
+            'what was the french revolution': "The French Revolution was a period of radical social and political upheaval in France from 1789 to 1799 that fundamentally changed the course of French history. It led to the end of the monarchy, the rise of Napoleon Bonaparte, and significant social reforms.",
+            'who was julius caesar': "Julius Caesar was a Roman general and statesman who played a critical role in the events that led to the demise of the Roman Republic and the rise of the Roman Empire. He was assassinated in 44 BC by a group of senators.",
+            'what was the peloponnesian war': "The Peloponnesian War was an ancient Greek war fought between the Delian League led by Athens and the Peloponnesian League led by Sparta. It lasted from 431 to 404 BC and ended with the defeat of Athens.",
+            'what was the tuskegee airmen': "The Tuskegee Airmen were a group of African American military pilots who fought in World War II. They were the first black aviators in the U.S. Army Air Corps and played a significant role in the war effort.",
+            'who was george washington': "George Washington was the first President of the United States, serving from 1789 to 1797. He is often referred to as the 'Father of His Country' for his leadership during the American Revolutionary War and his role in the formation of the United States.",
+            'what was the american revolution': "The American Revolution was the colonial revolt against British rule from 1775 to 1783. It resulted in the independence of the thirteen American colonies and the formation of the United States of America.",
+            'who was adolf hitler': "Adolf Hitler was the leader of the National Socialist German Workers' Party (Nazi Party) and became Chancellor of Germany in 1933. He led Germany through World War II and orchestrated the Holocaust before his death in 1945.",
+            'what was world war ii': "World War II was a global conflict that lasted from 1939 to 1945, involving most of the world's nations. It was marked by significant events such as the Holocaust, the use of nuclear weapons, and the Allied victory over the Axis powers.",
+            'what was the korean war': "The Korean War was a conflict between North Korea, supported by China and the Soviet Union, and South Korea, supported by the United States and other Western nations. It lasted from 1950 to 1953 and ended in an armistice that created the Korean Demilitarized Zone (DMZ).",
+            'what was the spanish civil war': "The Spanish Civil War was a conflict fought in Spain from 1936 to 1939 between the Republicans, who supported the Spanish Republic, and the Nationalists, led by General Francisco Franco. The war ended with Franco's victory and the establishment of a fascist dictatorship.",
+            'who was nelson mandela': "Nelson Mandela was a South African anti-apartheid revolutionary and political leader who became South Africa's first black president from 1994 to 1999. He is celebrated for his role in ending apartheid and his efforts to foster reconciliation.",
+            'what was the iraq war': "The Iraq War was a conflict that began in 2003 with the invasion of Iraq by a coalition led by the United States. It aimed to overthrow the regime of Saddam Hussein and led to significant political and social changes in Iraq.",
+            'what was the russian revolution': "The Russian Revolution of 1917 led to the fall of the Romanov dynasty and the rise of the Soviet Union. It consisted of two major events: the February Revolution, which led to the abdication of Tsar Nicholas II, and the October Revolution, which brought the Bolsheviks to power.",
+            'who was cleopatra': "Cleopatra VII was the last active ruler of the Ptolemaic Kingdom of Egypt. She is known for her alliances with Julius Caesar and Mark Antony, as well as her tragic end following the defeat by Octavian, who later became Emperor Augustus.",
+            'what was the holocaust': "The Holocaust was the genocide perpetrated by Nazi Germany during World War II, in which six million Jews, along with other minority groups, were systematically exterminated.",
+            'what was the iranian revolution': "The Iranian Revolution of 1979 led to the overthrow of the Shah of Iran and the establishment of an Islamic Republic under Ayatollah Khomeini. It marked a significant shift from a pro-Western autocratic regime to an anti-Western theocracy.",
+            'who was mahatma gandhi': "Mahatma Gandhi was a leader of the Indian independence movement against British rule, advocating for nonviolent civil disobedience. His efforts were instrumental in India's eventual independence in 1947.",
+            'what was the gulf war': "The Gulf War, also known as the Persian Gulf War, was a conflict in 1990-1991 following Iraq's invasion of Kuwait. A coalition led by the United States intervened to liberate Kuwait, leading to the withdrawal of Iraqi forces.",
+            'what was the 100 years war': "The Hundred Years' War was a series of conflicts fought between the Kingdoms of England and France from 1337 to 1453. It was characterized by intermittent battles and complex political alliances.",
+            'who was julius caesar': "Julius Caesar was a Roman general and statesman who played a critical role in the events that led to the demise of the Roman Republic and the rise of the Roman Empire. He was assassinated in 44 BC by a group of senators.",
+            'what was the battle of hastings': "The Battle of Hastings was fought in 1066 between the Norman-French army led by Duke William of Normandy and the English army led by King Harold II. The battle led to the Norman conquest of England.",
+            'who was charlemagne': "Charlemagne, also known as Charles the Great, was King of the Franks and later Emperor of the Carolingian Empire. He was crowned Emperor of the Romans in 800 and is often considered the 'Father of Europe' for his role in uniting much of Western Europe.",
+            'what was the spanish inquisition': "The Spanish Inquisition was an institution established in 1478 by the Catholic Monarchs of Spain to maintain Catholic orthodoxy in their kingdoms. It is known for its harsh and often brutal methods of interrogation and punishment.",
+            'who was king henry VIII': "King Henry VIII was King of England from 1509 to 1547. He is well-known for his six marriages and his role in the separation of the Church of England from the Roman Catholic Church.",
+            'what was the siege of leningrad': "The Siege of Leningrad was a prolonged military blockade undertaken by the German Army Group North against Leningrad (now Saint Petersburg) during World War II. It lasted from September 1941 to January 1944 and resulted in significant civilian suffering.",
+            'what was the battle of waterloo': "The Battle of Waterloo was fought in 1815 between Napoleon Bonaparte's French army and the Allied forces led by the Duke of Wellington and Prussian General Gebhard Leberecht von Blücher. Napoleon's defeat marked the end of the Napoleonic Wars.",
+            'what was the napoleonic wars': "The Napoleonic Wars were a series of conflicts involving Napoleon Bonaparte's French Empire and opposing coalitions. They lasted from 1803 to 1815 and reshaped European political boundaries and led to significant historical developments.",
+            'what was the battle of britain': "The Battle of Britain was a significant World War II air campaign fought between the Royal Air Force (RAF) and the Luftwaffe. It took place from July to October 1940 and was crucial in preventing a German invasion of Britain.",
+            'what was the crimean war': "The Crimean War was fought from 1853 to 1856, primarily involving Russia against an alliance of the Ottoman Empire, Britain, France, and Sardinia. It was triggered by disputes over the rights of Christian minorities in the Holy Land.",
+            'what was the zulu war': "The Zulu War was fought between the British Empire and the Zulu Kingdom in 1879. It was part of British efforts to expand their influence in Southern Africa and was marked by notable battles such as Isandlwana and Rorke's Drift.",
+            'what was the opium war': "The Opium Wars were two conflicts between China and Western powers (primarily Britain) in the mid-19th century, resulting from disputes over trade, including the opium trade. The wars led to significant concessions from China to Western powers.",
+            'what was the taiping rebellion': "The Taiping Rebellion was a massive civil war in China from 1850 to 1864 led by the Taiping Heavenly Kingdom against the Qing Dynasty. It was one of the deadliest conflicts in history and resulted in millions of deaths.",
+            'what was the boxer rebellion': "The Boxer Rebellion was an anti-imperialist uprising in China from 1899 to 1901. The Boxers, a Chinese secret society, sought to remove foreign influence from China. The rebellion was eventually quelled by an international coalition of powers.",
+            'what was the mutiny of 1857': "The Indian Rebellion of 1857, also known as the Sepoy Mutiny, was a major, but unsuccessful, uprising against the British East India Company's rule in India. It marked the end of the company's rule and the beginning of direct British governance in India.",
+            'who was catherine the great': "Catherine the Great, also known as Catherine II, was Empress of Russia from 1762 to 1796. She is known for her significant contributions to the expansion and modernization of Russia and her patronage of the arts and education.",
+            'what was the mongol empire': "The Mongol Empire was the largest contiguous empire in history, founded by Genghis Khan in the early 13th century. It expanded rapidly across Asia and Europe, shaping the course of history in numerous regions.",
+            'what was the ottoman empire': "The Ottoman Empire was a powerful state that lasted from the late 13th century until the early 20th century. It spanned parts of Europe, Asia, and Africa and was known for its diverse culture and significant influence on world history.",
+            'who was genghis khan': "Genghis Khan was the founder and first Great Khan of the Mongol Empire. He united the Mongol tribes and expanded his empire across Asia and Europe, creating one of the largest empires in history.",
+            'who was alexander the great': "Alexander the Great was the King of Macedonia from 336 to 323 BC. He is known for his unprecedented military conquests that created one of the largest empires of the ancient world, stretching from Greece to Egypt and into India.",
+            'what was the punic wars': "The Punic Wars were a series of three conflicts fought between Rome and Carthage from 264 to 146 BC. They were critical in establishing Rome's dominance over the western Mediterranean.",
+            'what was the roman empire': "The Roman Empire was a powerful and influential empire that existed from 27 BC to AD 476 (in the West) and until 1453 (in the East as the Byzantine Empire). It was known for its vast territorial holdings, advanced engineering, and significant cultural contributions.",
+            'what was the ancient egyptian civilization': "The ancient Egyptian civilization flourished along the Nile River from around 3100 BC to 30 BC. It is known for its monumental architecture, such as the pyramids and the Sphinx, as well as its complex society and contributions to writing, science, and art.",
+            'what was the renaissance': "The Renaissance was a cultural movement that began in Italy in the 14th century and spread throughout Europe. It marked a period of renewed interest in classical art, literature, and science, leading to significant advancements and cultural achievements.",
+            'who was martin luther': "Martin Luther was a German theologian and monk who initiated the Protestant Reformation in the 16 century with his Ninety-Five Theses. He challenged the Catholic Church's practices and doctrines, leading to significant religious and political changes in Europe.",
+            'what was the enlightenment': "The Enlightenment was an intellectual and cultural movement in the 17th and 18th centuries that emphasized reason, individualism, and skepticism of traditional authority. It had a profound impact on politics, science, and philosophy.",
+            'who was thomas jefferson': "Thomas Jefferson was the third President of the United States, serving from 1801 to 1809. He is also known for drafting the Declaration of Independence and his role in the Louisiana Purchase.",
+            'what was the industrial revolution': "The Industrial Revolution was a period of significant technological and industrial development that began in the late 18th century. It brought about major changes in manufacturing, transportation, and society, transforming economies and leading to urbanization.",
+            'what was the agricultural revolution': "The Agricultural Revolution refers to the significant changes in farming practices that began around 10,000 BC. It marked the transition from nomadic hunting and gathering to settled agricultural societies, leading to the development of civilizations.",
+            'who was isaac newton': "Isaac Newton was an English mathematician and physicist who made foundational contributions to calculus, mechanics, and optics. His work 'Principia Mathematica' laid the groundwork for classical mechanics.",
+            'who was charles darwin': "Charles Darwin was an English naturalist known for his theory of evolution by natural selection, detailed in his work 'On the Origin of Species.' His ideas revolutionized the understanding of biological diversity and species adaptation.",
+            'who was albert einstein': "Albert Einstein was a theoretical physicist known for developing the theory of relativity. His famous equation E=mc^2 revolutionized physics and our understanding of energy and mass.",
+            'what was the theory of relativity': "The theory of relativity, developed by Albert Einstein, includes two parts: the special theory of relativity, which deals with objects moving at constant speeds, and the general theory of relativity, which addresses gravitation and acceleration.",
+            'what was quantum mechanics': "Quantum mechanics is a fundamental theory in physics that describes the behavior of particles at the smallest scales. It introduces concepts such as wave-particle duality and quantization of energy, which challenge classical intuitions about the physical world.",
+            'who was niels bohr': "Niels Bohr was a Danish physicist who made foundational contributions to understanding atomic structure and quantum theory. His model of the atom and his work on quantum mechanics were crucial to the development of modern physics.",
+            'what was the bohr model': "The Bohr model, proposed by Niels Bohr, describes the atom as having a small, positively charged nucleus surrounded by orbiting electrons. It introduced the idea that electrons occupy specific energy levels.",
+            'what was the schrodinger equation': "The Schrödinger equation is a fundamental equation in quantum mechanics that describes how the quantum state of a physical system changes over time. It is central to understanding the behavior of particles at the quantum level.",
+            'who was sigmund freud': "Sigmund Freud was an Austrian neurologist and the founder of psychoanalysis. He developed influential theories about the unconscious mind, dream interpretation, and the role of childhood experiences in shaping personality.",
+            'what was psychoanalysis': "Psychoanalysis is a therapeutic and theoretical framework developed by Sigmund Freud. It focuses on uncovering unconscious thoughts and desires through techniques such as free association and dream analysis to treat mental disorders.",
+            'who was carl jung': "Carl Jung was a Swiss psychiatrist and psychoanalyst who founded analytical psychology. He is known for concepts such as the collective unconscious, archetypes, and the process of individuation.",
+            'what was the collective unconscious': "The collective unconscious is a concept developed by Carl Jung that refers to the part of the unconscious mind shared by all human beings. It contains universal experiences and archetypes common to all cultures and societies.",
+            'what was the theory of evolution': "The theory of evolution, proposed by Charles Darwin, posits that species evolve over time through natural selection. This process involves variations within species and the survival of individuals best adapted to their environment.",
+            'what was the big bang theory': "The Big Bang Theory is the leading explanation for the origin of the universe. It suggests that the universe began from an extremely hot and dense state about 13.8 billion years ago and has been expanding ever since.",
+            'what was the theory of relativity': "The theory of relativity, developed by Albert Einstein, includes both the special theory of relativity and the general theory of relativity. It revolutionized our understanding of space, time, and gravity.",
+            'what was the golden ratio': "The golden ratio, approximately 1.618, is a mathematical ratio commonly found in nature and art. It is often denoted by the Greek letter φ (phi) and represents an aesthetically pleasing proportion.",
+            'what was pi': "Pi (π) is a mathematical constant representing the ratio of a circle's circumference to its diameter. It is an irrational number, approximately equal to 3.14159, and is used extensively in geometry and trigonometry.",
+            'what is pi': "Pi (π) is a mathematical constant representing the ratio of a circle's circumference to its diameter. It is an irrational number, approximately equal to 3.14159, and is used extensively in geometry and trigonometry.",
+            'what was pythagorean theorem': "The Pythagorean Theorem is a fundamental principle in geometry stating that in a right-angled triangle, the square of the length of the hypotenuse is equal to the sum of the squares of the other two sides. It is expressed as \(a^2 + b^2 = c^2\).",
+            'what was newton\'s laws of motion': "Newton's laws of motion are three fundamental principles describing the relationship between the motion of an object and the forces acting on it. They include the law of inertia, the law of acceleration, and the law of action and reaction.",
+            'what was the laws of thermodynamics': "The laws of thermodynamics are fundamental principles governing energy and heat transfer. They include the first law (energy conservation), the second law (entropy increase), and the third law (absolute zero entropy).",
+            'what was the law of universal gravitation': "The law of universal gravitation, formulated by Isaac Newton, states that every mass attracts every other mass with a force proportional to the product of their masses and inversely proportional to the square of the distance between them.",
+            'what was the theory of plate tectonics': "The theory of plate tectonics explains the movement of Earth's lithospheric plates and how their interactions shape the planet's surface. It accounts for phenomena such as earthquakes, volcanic activity, and continental drift.",
+            'what was the theory of relativity': "The theory of relativity, developed by Albert Einstein, revolutionized our understanding of space, time, and gravity. It includes the special theory of relativity, which deals with objects moving at constant speeds, and the general theory of relativity, which describes gravitation as a curvature of spacetime.",
+            'what was the uncertainty principle': "The uncertainty principle, formulated by Werner Heisenberg, states that it is impossible to simultaneously know both the exact position and momentum of a particle. This principle is a fundamental concept in quantum mechanics.",
+            'what was the law of conservation of energy': "The law of conservation of energy states that energy cannot be created or destroyed, only transformed from one form to another. This principle is a fundamental concept in physics and chemistry.",
+            'what was the theory of relativity': "The theory of relativity, developed by Albert Einstein, includes the special theory of relativity and the general theory of relativity. It provides a new framework for understanding space, time, and gravity, fundamentally changing our understanding of the physical universe.",
+            'what was the law of conservation of mass': "The law of conservation of mass states that mass cannot be created or destroyed in a closed system through ordinary chemical reactions or physical changes. The total mass of reactants equals the total mass of products.",
+            'what was the law of conservation of momentum': "The law of conservation of momentum states that the total momentum of a closed system remains constant if no external forces act on it. Momentum is the product of an object's mass and its velocity.",
+            'what was the law of conservation of charge': "The law of conservation of charge states that the total electric charge in a closed system remains constant over time. Charge cannot be created or destroyed, only transferred between objects.",
+            'what was the law of conservation of angular momentum': "The law of conservation of angular momentum states that if no external torque acts on a system, the total angular momentum of that system remains constant. It is a fundamental principle in rotational dynamics.",
+            'what was the law of electromagnetic induction': "The law of electromagnetic induction, formulated by Michael Faraday, states that a change in the magnetic field within a closed loop induces an electromotive force (EMF) in the loop. This principle is fundamental to the operation of electric generators and transformers.",
+            'what was the law of superposition': "The law of superposition states that in any sequence of undisturbed sedimentary rocks, the oldest layers are at the bottom and the youngest are at the top. It is a key principle in geology for determining the relative ages of rock layers.",
+            'what was the law of dominance': "The law of dominance, proposed by Gregor Mendel, states that in a pair of alleles, one allele may mask the expression of the other. The dominant allele's trait is expressed in the organism's phenotype, while the recessive allele's trait is not.",
+            'what was the law of segregation': "The law of segregation, proposed by Gregor Mendel, states that during the formation of gametes, the two alleles for a trait separate so that each gamete receives only one allele. This principle is fundamental to the study of genetics.",
+            'what was the law of independent assortment': "The law of independent assortment, proposed by Gregor Mendel, states that alleles for different traits are distributed to gametes independently of each other. This principle explains how genetic variation occurs.",
+            'what was the cell theory': "The cell theory is a fundamental concept in biology that states that all living organisms are composed of cells, cells are the basic unit of life, and all cells come from pre-existing cells. It is central to the study of biology and the understanding of living organisms.",
+            'what was the germ theory': "The germ theory of disease proposes that microorganisms are the cause of many diseases. It revolutionized medicine by establishing that diseases are caused by pathogens such as bacteria, viruses, and fungi, leading to improved sanitation and medical practices.",
+            'what was the theory of evolution by natural selection': "The theory of evolution by natural selection, proposed by Charles Darwin, posits that species evolve over time through the survival and reproduction of individuals with advantageous traits. This process leads to the adaptation of species to their environments.",
+            'what was the theory of general relativity': "The theory of general relativity, developed by Albert Einstein, describes gravity as the curvature of spacetime caused by mass and energy. It provides a new understanding of gravitational forces and has been confirmed by numerous experiments and observations.",
+            'what was the theory of special relativity': "The theory of special relativity, formulated by Albert Einstein, addresses the behavior of objects moving at constant speeds, particularly those approaching the speed of light. It introduced concepts such as time dilation and length contraction.",
+            'what was the theory of evolution': "The theory of evolution, proposed by Charles Darwin, explains that species evolve over time through the process of natural selection. This theory revolutionized the understanding of biological diversity and the adaptation of organisms to their environments.",
+            'what was the theory of relativity': "The theory of relativity, developed by Albert Einstein, includes both special relativity and general relativity. It fundamentally changed our understanding of space, time, and gravity, providing a unified framework for understanding the physical universe.",  
+            'latest samsung tv': "The latest Samsung TV models include the Samsung QN90C Neo QLED TV and Samsung S95C OLED TV.",
+            'latest lg tv': "The latest LG TV models include the LG C3 OLED TV and LG QNED90 Series LED TV.",
+            'latest sony tv': "The latest Sony TV models include the Sony A95L OLED TV and Sony X90L LED TV.",
+            'latest iphone': "The latest iPhone models are the iPhone 15, iPhone 15 Plus, iPhone 15 Pro, and iPhone 15 Pro Max.",
+            'latest samsung phone': "The latest Samsung phone models are the Samsung Galaxy S24, Galaxy S24+, and Galaxy S24 Ultra.",
+            'latest google phone': "The latest Google phone models are the Google Pixel 8 and Pixel 8 Pro.",
+            'latest laptop': "The latest laptops include the Apple MacBook Pro 16-inch (2024), Dell XPS 13 Plus, and Lenovo ThinkPad X1 Carbon Gen 11.",
+            'latest hp laptop': "The latest HP laptops include the HP Spectre x360 14 and HP Envy x360 15.",
+            'latest dell laptop': "The latest Dell laptops include the Dell XPS 13 and Dell Inspiron 15 7000.",
+            'latest macbook': "The latest MacBook models are the MacBook Air (M3, 2024) and MacBook Pro (M3 Pro, 2023).",
+            'who makes the best tv': "The best TV brand depends on your needs. Popular brands include Samsung, LG, and Sony for their high-quality displays.",
+            'who makes the best phone': "Top phone brands include Apple for the iPhone, Samsung for the Galaxy series, and Google for the Pixel series.",
+            'who makes the best laptop': "Leading laptop brands include Apple for the MacBook, Dell for the XPS series, and Lenovo for the ThinkPad series.",
+            'best tv for gaming': "For gaming, the best TVs include the LG C3 OLED TV, Samsung QN90C Neo QLED TV, and Sony A95L OLED TV due to their low input lag and high refresh rates.",
+            'best phone for photography': "The best phones for photography are the iPhone 15 Pro Max, Samsung Galaxy S24 Ultra, and Google Pixel 8 Pro.",
+            'best laptop for programming': "The best laptops for programming include the MacBook Pro (M3 Pro, 2023), Dell XPS 15, and Lenovo ThinkPad X1 Carbon Gen 11.",
+            'best tv for movies': "For movies, consider the LG C3 OLED TV, Sony A95L OLED TV, or Samsung QN90C Neo QLED TV for their excellent color accuracy and contrast.",
+            'best phone for battery life': "Phones with the best battery life include the Samsung Galaxy S24 Ultra, iPhone 15 Pro Max, and Google Pixel 8 Pro.",
+            'best laptop for design': "For design work, the MacBook Pro (M3 Pro, 2024), Dell XPS 15, and Microsoft Surface Laptop Studio are excellent choices due to their high-resolution displays and powerful specs.",
+            'best tv brands': "Top TV brands include Samsung, LG, Sony, and Panasonic for their advanced technology and quality.",
+            'best phone brands': "Leading phone brands include Apple, Samsung, Google, and OnePlus.",
+            'best laptop brands': "Top laptop brands include Apple, Dell, Lenovo, and HP.",
+            'how to choose a tv': "When choosing a TV, consider factors like screen size, resolution, display type (OLED, QLED, LED), smart features, and connectivity options.",
+            'how to choose a phone': "When choosing a phone, consider factors like operating system (iOS or Android), camera quality, battery life, performance, and storage options.",
+            'how to choose a laptop': "When choosing a laptop, consider factors like operating system, processor type, RAM, storage capacity, display quality, and battery life.",
+            'best 4k tv': "The best 4K TVs include the LG C3 OLED TV, Samsung QN90C Neo QLED TV, and Sony A95L OLED TV.",
+            'best budget tv': "For a budget TV, consider models like the TCL 6-Series or Hisense U6H, which offer good performance at a lower price.",
+            'best budget phone': "Good budget phones include the Google Pixel 6a, Samsung Galaxy A54, and OnePlus Nord N200.",
+            'best budget laptop': "For budget laptops, consider models like the Acer Aspire 5, Lenovo IdeaPad 3, and HP Pavilion x360.",
+            'best tv for sports': "For sports, choose TVs with high refresh rates and low motion blur, like the Samsung QN90C Neo QLED TV or LG C3 OLED TV.",
+            'best phone for gaming': "Phones best for gaming include the Asus ROG Phone 7, Lenovo Legion Phone Duel 2, and iPhone 15 Pro Max.",
+            'best laptop for students': "For students, good laptops include the Apple MacBook Air (M2), Dell Inspiron 14, and Lenovo IdeaPad 3.",
+            'best tv for smart features': "For smart features, consider TVs like the LG C3 OLED TV, Samsung QN90C Neo QLED TV, and Sony A95L OLED TV with built-in streaming apps and voice assistants.",
+            'best phone for security': "Phones known for strong security features include the iPhone 15 Pro Max with iOS security and Google Pixel 8 Pro with Android's latest security updates.",
+            'best laptop for video editing': "Top laptops for video editing include the MacBook Pro (M2 Pro), Dell XPS 15, and ASUS ROG Zephyrus G14.",
+            'best tv for hdr': "The best TVs for HDR include the LG C3 OLED TV, Sony A95L OLED TV, and Samsung QN90C Neo QLED TV, offering excellent HDR performance.",
+            'best phone for screen quality': "Phones with the best screen quality include the iPhone 15 Pro Max, Samsung Galaxy S24 Ultra, and Google Pixel 8 Pro.",
+            'best laptop for portability': "For portability, consider laptops like the MacBook Air (M2), Dell XPS 13, and Lenovo ThinkPad X1 Carbon.",
+            'who makes the best tv': "The best smart TVs are made by brands like LG, Samsung, and Sony, offering advanced smart features and interfaces.",
+            'who makes the best gaming phone': "Top brands for gaming phones include Asus with its ROG Phone series, Lenovo with the Legion Phone series, and ASUS with the ROG Phone series.",
+            'who makes the best laptop for professionals': "For professionals, top laptop brands include Apple (MacBook Pro), Dell (XPS series), and Lenovo (ThinkPad series).",
+            'best tv for home theater': "For a home theater, consider the LG C3 OLED TV, Sony A95L OLED TV, or Samsung QN90C Neo QLED TV for their excellent picture quality and immersive experience.",
+            'best phone for everyday use': "For everyday use, popular choices include the iPhone 15, Samsung Galaxy S24, and Google Pixel 8.",
+            'best laptop for gaming': "Top gaming laptops include the ASUS ROG Strix Scar, Alienware x17 R2, and Razer Blade 15.",
+            'best tv for casual watching': "For casual watching, consider budget-friendly options like the TCL 6-Series or Hisense U6H.",
+            'best phone for battery life': "Phones with the best battery life include the Samsung Galaxy S24 Ultra, iPhone 15 Pro Max, and Motorola Moto G Power.",
+            'best laptop for multitasking': "For multitasking, consider the MacBook Pro (M2 Pro), Dell XPS 15, and Lenovo ThinkPad X1 Carbon.",
+            'who makes the best 4k tv': "Leading brands for 4K TVs include LG, Samsung, and Sony, known for their high-quality 4K displays.",
+            'who makes the best budget laptop': "For budget laptops, brands like Acer, Lenovo, and HP offer good value for money.",
+            'who makes the best budget phone': "Top brands for budget phones include Google with the Pixel 6a, Samsung with the Galaxy A54, and OnePlus with the Nord N200.",
+            'best tv for family use': "For family use, consider versatile options like the LG C3 OLED TV, Samsung QN90C Neo QLED TV, or Sony X90L LED TV.",
+            'best phone for business': "Phones suited for business include the iPhone 15 Plus, Samsung Galaxy S24 Ultra, and Google Pixel 7a.",
+            'best laptop for office work': "For office work, good laptops include the Lenovo ThinkPad X1 Carbon, HP Elite Dragonfly, and MacBook Air (m3).",
+            'best tv for gaming': "For gaming, top choices include the LG C3 OLED TV, Samsung QN90C Neo QLED TV, and Sony A95L OLED TV.",
+            'best phone for durability': "Phones known for durability include the iPhone 15 Pro Max, Samsung Galaxy S24 Ultra, and Google Pixel 8 Pro.",
+            'best laptop for creative professionals': "For creative professionals, consider the MacBook Pro (M2 Pro), Dell XPS 15, and Microsoft Surface Laptop Studio.",   
+            'give me a wallpaper': "For wallpapers, I suggest visiting https://tudify.co.uk/wall",   
+            'is there a safe place for my kids here': "For children, there are some excellent options available, such as Tudify Kids and Amanda AI in child mode. Tudify Kids is a fantastic educational tool designed specifically for young learners. It offers a wide range of interactive content that is both fun and educational, including games, videos, and quizzes. The platform covers various subjects such as math, science, reading, and more, ensuring that children are engaged and learning at the same time. The user-friendly interface and colorful graphics make it an appealing choice for kids, encouraging them to explore and absorb new information effortlessly.Amanda AI child mode is another great option tailored for children. This mode ensures a safe and controlled digital environment where kids can interact with AI technology without any risk. It provides age-appropriate responses and activities, making learning an enjoyable experience. Amanda AI in child mode can help children with homework, answer their questions, and even engage them in educational games and stories. This feature also allows parents to monitor and manage their children’s activities, giving them peace of mind while their kids benefit from the latest AI advancements.Both Tudify Kids and Amanda AI child mode are excellent choices for enhancing children’s learning experiences through innovative and safe digital tools.",   
+            'is this private': "Yes. All input you give me is processed on-device.",   
+            'is this Luna': "Yes. how can I help 😁",   
+            'do my job': "fuck no",   
+            'why not': "I don't understand follow-up questions. I'm not Einstein 🤣",   
+            'whats the dark web': "The dark web is a secretive place that was made by the government. it uses .onion links which can only be accessed with the tor browser, it's best to stay off there.",   
+            'what is the dark web': "The dark web is a secretive place that was made by the government. it uses .onion links which can only be accessed with the tor browser, it's best to stay off there.",   
+            '🍆💦': "GO TO TINDER, IM NOT REAL!!!!!!!!",   
+            'ily': "As i'm a computer program, I will just ignore that",
+            'i love you': "As i'm a computer program, I will just ignore that",
+            'hey': "Hey there, how are you?",
+            'sup': "Hey there, how are you?",
+            '?': "what did I do??",   
+            'Hey there👋 I`m Luna, your personal assistant. You appear to have typed nothing. How can I help?': "those who copy luna will be punished",
+
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            addMessage("Hi, I'm Luna, your AI assistant. How can I help?", 'ai');
+        });
+
+        function fetchInfo() {
+            const query = document.getElementById('query').value.toLowerCase().trim();
+            const responseArea = document.getElementById('response');
+
+            if (query) {
+                // Create user message element
+                const userMessage = document.createElement('div');
+                userMessage.classList.add('message', 'user');
+                userMessage.textContent = query;
+                responseArea.appendChild(userMessage);
+
+                // Create AI response element
+                const aiResponse = document.createElement('div');
+                aiResponse.classList.add('message', 'ai');
+                aiResponse.textContent = responses[query] || "Sorry, I don't understand that.";
+                responseArea.appendChild(aiResponse);
+
+                // Scroll to bottom
+                responseArea.scrollTop = responseArea.scrollHeight;
+
+                // Clear input field
+                document.getElementById('query').value = '';
+            }
+        }
+
+</script>
+</body>
+</html>
