@@ -12,6 +12,7 @@
             padding: 0;
             background-color: #f5f5f5;
             color: #333;
+            overflow-x: hidden;
         }
 
         .container {
@@ -32,35 +33,39 @@
             font-size: 48px;
             margin: 0;
             text-transform: uppercase;
-            animation: slideIn 2s ease-out;
         }
 
         header p {
             font-size: 24px;
             margin: 20px 0 0;
-            animation: fadeIn 3s ease-out;
-        }
-
-        .content {
-            margin: 60px 0;
         }
 
         .section {
-            margin-bottom: 60px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .section.active {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .section h2 {
             font-size: 36px;
             margin-bottom: 20px;
             color: #000;
-            animation: bounce 1.5s infinite;
         }
 
         .section p {
             font-size: 20px;
-            margin: 0 auto 40px;
             max-width: 800px;
-            animation: spinIn 2s ease-in-out;
+            margin: 0 auto;
         }
 
         .cta-button {
@@ -72,12 +77,11 @@
             text-transform: uppercase;
             text-decoration: none;
             border-radius: 50px;
-            animation: wiggle 1.5s infinite;
             transition: transform 0.3s ease;
         }
 
         .cta-button:hover {
-            transform: scale(1.1);
+            transform: scale(1.05);
         }
 
         footer {
@@ -85,56 +89,6 @@
             color: #fff;
             padding: 20px;
             text-align: center;
-        }
-
-        /* Animations */
-        @keyframes slideIn {
-            0% {
-                transform: translateX(-100%);
-                opacity: 0;
-            }
-            100% {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
-
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        @keyframes spinIn {
-            0% {
-                transform: rotate(-360deg);
-                opacity: 0;
-            }
-            100% {
-                transform: rotate(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes wiggle {
-            0%, 100% {
-                transform: rotate(-5deg);
-            }
-            50% {
-                transform: rotate(5deg);
-            }
         }
     </style>
 </head>
@@ -145,20 +99,24 @@
     </header>
 
     <div class="container">
-        <div class="content">
-            <div class="section">
+        <div class="section">
+            <div>
                 <h2>Deploy Apps with Ease</h2>
                 <p>TudifyOS 17 makes app deployment a breeze. With just a few clicks, your app is live on TudifyOS, ensuring a seamless experience for all users.</p>
                 <a href="https://tudify.cloud" class="cta-button">Get Started</a>
             </div>
+        </div>
 
-            <div class="section">
+        <div class="section">
+            <div>
                 <h2>Restrict with Simplicity</h2>
                 <p>Managing restrictions has never been easier. Whether it's content controls or app limitations, TudifyOS 17 provides powerful tools with a simple interface.</p>
                 <a href="https://tudify.cloud/restrictions" class="cta-button">Learn More</a>
             </div>
+        </div>
 
-            <div class="section">
+        <div class="section">
+            <div>
                 <h2>Hosting Made Simple</h2>
                 <p>Get your app hosted with Tudify.co.uk in just a few steps. Our cloud solutions are robust, reliable, and ready to scale as your business grows.</p>
                 <a href="https://tudify.co.uk" class="cta-button">Get Hosting</a>
@@ -169,5 +127,22 @@
     <footer>
         <p>&copy; 2024 Tudify. All rights reserved.</p>
     </footer>
+
+    <script>
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('.section');
+            const triggerBottom = window.innerHeight / 5 * 4;
+
+            sections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top;
+
+                if (sectionTop < triggerBottom) {
+                    section.classList.add('active');
+                } else {
+                    section.classList.remove('active');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
