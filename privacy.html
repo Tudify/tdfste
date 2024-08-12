@@ -8,28 +8,31 @@
         body {
             margin: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: #f8f8f8;
-            color: #333;
+            background-color: #121212; /* Dark background */
+            color: #e0e0e0; /* Light text color */
             overflow-x: hidden;
         }
 
         header {
-            background-color: #000;
+            background-color: #1f1f1f; /* Slightly lighter dark background */
             color: #fff;
             padding: 100px 20px;
             text-align: center;
             position: relative;
+            border-bottom: 1px solid #333; /* Subtle bottom border */
         }
 
         header h1 {
             font-size: 60px;
             font-weight: bold;
             margin: 0;
+            animation: fadeIn 2s ease-in-out;
         }
 
         header p {
             font-size: 24px;
             margin-top: 20px;
+            animation: fadeIn 2s ease-in-out 1s;
         }
 
         section {
@@ -46,12 +49,16 @@
             font-size: 42px;
             margin-bottom: 20px;
             font-weight: bold;
+            color: #e0e0e0; /* Light text color */
+            animation: fadeIn 2s ease-in-out;
         }
 
         section p {
             font-size: 24px;
             margin-bottom: 60px;
             line-height: 1.6;
+            color: #b0b0b0; /* Slightly dimmer text color */
+            animation: fadeIn 2s ease-in-out 0.5s;
         }
 
         .hidden-text {
@@ -63,11 +70,11 @@
         }
 
         .card {
-            background: #fff;
+            background: #1e1e1e; /* Darker card background */
             padding: 40px;
             margin: 40px auto;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Enhanced shadow for dark mode */
             max-width: 600px;
             transition: transform 0.5s ease, box-shadow 0.5s ease;
             opacity: 0;
@@ -79,11 +86,17 @@
             transform: translateY(0);
         }
 
+        .card p {
+            font-size: 24px;
+            color: #e0e0e0; /* Light text color */
+        }
+
         footer {
-            background-color: #333;
-            color: #fff;
+            background-color: #1f1f1f; /* Consistent dark background */
+            color: #e0e0e0;
             text-align: center;
             padding: 30px 20px;
+            border-top: 1px solid #333; /* Subtle top border */
         }
 
         footer p {
@@ -91,7 +104,21 @@
             font-size: 18px;
         }
 
-        /* Scroll-triggered section reveal */
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            0% { transform: translateY(50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes textReveal {
+            0% { content: '**********'; opacity: 0; }
+            100% { opacity: 1; }
+        }
+
         .section-active {
             opacity: 1;
             transform: translateY(0);
@@ -109,7 +136,7 @@
         <p>
             SimpleWeb is built on the principle that your data is yours and yours alone. 
             <span class="hidden-text">We don’t track, store, or sell any of your information.</span> 
-            Your browsing experience is entirely private.
+            Your browsing experience is entirely private. We use state-of-the-art encryption to ensure that your data remains secure.
         </p>
     </section>
 
@@ -118,7 +145,7 @@
         <p>
             Your TudifyID is designed to store only the most essential information. 
             <span class="hidden-text">We collect just what is necessary to provide you with a seamless experience.</span> 
-            You have full control over your data.
+            You have full control over your data. Manage your privacy settings effortlessly through our user-friendly interface.
         </p>
     </section>
 
@@ -127,7 +154,25 @@
         <p>
             Wall is your personal fortress on Tudify. 
             <span class="hidden-text">It only gathers the bare minimum data required for it to function.</span> 
-            Your personal space remains personal.
+            Your personal space remains personal. We continuously update our security protocols to guard against emerging threats.
+        </p>
+    </section>
+
+    <section>
+        <h2>Our Commitment to Privacy</h2>
+        <p>
+            At Tudify, we are committed to ensuring your data remains safe and secure. 
+            <span class="hidden-text">Our privacy policies are transparent and designed to empower you.</span> 
+            No hidden agendas, just privacy that you can trust. Our dedicated team works around the clock to uphold the highest standards of data protection.
+        </p>
+    </section>
+
+    <section>
+        <h2>Innovation with Privacy in Mind</h2>
+        <p>
+            We believe in innovation without compromising your privacy. 
+            <span class="hidden-text">Our products are designed with the highest standards of privacy in mind.</span> 
+            Enjoy cutting-edge features with peace of mind, knowing that your personal information is protected by the best security measures.
         </p>
     </section>
 
@@ -140,6 +185,7 @@
         function handleScroll() {
             const sections = document.querySelectorAll('section');
             const hiddenTexts = document.querySelectorAll('.hidden-text');
+            const cards = document.querySelectorAll('.card');
 
             sections.forEach(section => {
                 const sectionTop = section.getBoundingClientRect().top;
@@ -155,6 +201,14 @@
 
                 if (textTop <= window.innerHeight - 100) {
                     text.style.opacity = '1';
+                }
+            });
+
+            cards.forEach(card => {
+                const cardTop = card.getBoundingClientRect().top;
+
+                if (cardTop <= window.innerHeight - 100) {
+                    card.classList.add('active');
                 }
             });
         }
