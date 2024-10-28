@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DepthUI by Tudify</title>
+    <style>
+        /* Import DM Sans */
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap');
+
+        /* Global Styles */
+        body {
+            font-family: 'DM Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f8;
+            color: #333;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .header {
+            text-align: center;
+            padding: 20px;
+            background-color: #333;
+            color: #fff;
+        }
+
+        /* Scrollable Image Section */
+        .scrolling-images {
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 20px;
+            background: #eee;
+        }
+        .scrolling-images img {
+            height: 200px;
+            margin: 0 10px;
+            border-radius: 8px;
+            transition: transform 0.3s;
+        }
+        .scrolling-images img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Sections for Details */
+        .section {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .section img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>DepthUI by Tudify</h1>
+        <p>Experience a new level of mobile UI</p>
+    </div>
+
+    <!-- Scrolling Image Section -->
+    <div class="scrolling-images">
+        <img src="hs.png" alt="Home Screen">
+        <img src="m.png" alt="Messages">
+        <img src="ab.png" alt="About">
+    </div>
+
+    <!-- Home Screen Section -->
+    <div class="section" id="home-screen">
+        <h2>Home Screen</h2>
+        <img src="hs.png" alt="Home Screen">
+        <p>DepthUI’s beautifully modern Home Screen, designed for simplicity and ease of use.</p>
+    </div>
+
+    <!-- Messages Screen Section -->
+    <div class="section" id="messages-screen">
+        <h2>Messages</h2>
+        <img src="m.png" alt="Messages Screen">
+        <p>Stay connected seamlessly with DepthUI’s message interface, offering clear and streamlined communication.</p>
+    </div>
+
+    <!-- About Section -->
+    <div class="section" id="about">
+        <h2>About DepthUI</h2>
+        <img src="ab.png" alt="About DepthUI">
+        <p>DepthUI brings you an innovative mobile experience by Tudify, merging design and functionality.</p>
+    </div>
+
+</body>
+</html>
