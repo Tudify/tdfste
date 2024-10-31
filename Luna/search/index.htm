@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luna Search</title>
+    <!-- Import DM Mono font from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'DM Mono', monospace;
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        input, button {
+            font-family: 'DM Mono', monospace;
+            font-size: 16px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        pre {
+            text-align: left;
+            background-color: #e8e8e8;
+            padding: 15px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'DM Mono', monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Luna Search</h1>
+    <input type="text" id="query" placeholder="Enter your search query">
+    <button onclick="performSearch()">Search</button>
+    <pre id="results"></pre>
+
+    <script>
+        // API keys
+        const openAiKey = "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";
+        const googleApiKey = "AIzaSyCDZTJgdnAh_W5z2XEsFNX3l1PNX9jhIy4";
+        const googleCx = "your-google-custom-search-engine-id";
+
+        async function performSearch() {
+            const query = document.getElementById("query").value;
+            document.getElementById("results").innerText = "Searching...";
+
+            try {
+                // Google Search API request
+                const googleUrl = `https://www.googleapis.com/customsearch/v1?key=${googleApiKey}&cx=${googleCx}&q=${encodeURIComponent(query)}`;
+                const googleResponse = await fetch(googleUrl);
+                const googleData = await googleResponse.json();
+
+                // OpenAI API request
+                const openAiUrl = "https://api.openai.com/v1/completions";
+                const openAiResponse = await fetch(openAiUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${openAiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: "text-davinci-003",
+                        prompt: `Answer this query: ${query}`,
+                        max_tokens: 100
+                    })
+                });
+                const openAiData = await openAiResponse.json();
+
+                // Display results
+                let resultText = "Google Search Results:\n\n";
+                googleData.items.forEach(item => {
+                    resultText += `${item.title}\n${item.link}\n${item.snippet}\n\n`;
+                });
+
+                resultText += "\n\nOpenAI Response:\n";
+                resultText += openAiData.choices[0].text;
+
+                document.getElementById("results").innerText = resultText;
+            } catch (error) {
+                document.getElementById("results").innerText = "An error occurred: " + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
