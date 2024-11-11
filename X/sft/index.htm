@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale:1.0">
+    <meta name="viewport" content="width=device-width, initial-scale: 1.0">
     <title>System Update</title>
     <style>
         body {
@@ -56,24 +56,11 @@
             font-weight: bold;
             border-radius: 10px;
         }
-        .spinner {
-            margin-top: 20px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid white;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 2s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
     </style>
 </head>
 <body>
     <div class="update-screen" id="updateScreen">
-        <h2>Do you want to update?</h2>
+        <h2 id="updateText">Do you want to update?</h2>
         <div class="options">
             <div class="option selected" id="ok">OK</div>
             <div class="option" id="powerOff">Power Off</div>
@@ -82,7 +69,7 @@
         <div class="progress-container" id="progressContainer" style="display: none;">
             <div class="progress-bar" id="progressBar">0%</div>
         </div>
-        <div class="spinner" id="spinner" style="display: none;"></div>
+        <!-- Removed the spinner circle -->
     </div>
 
     <script>
@@ -153,14 +140,19 @@
         function startUpdate() {
             // Hide the options
             document.querySelector('.options').style.display = 'none';
-            // Show progress bar and spinner
+            // Show progress bar
             document.getElementById('progressContainer').style.display = 'block';
-            document.getElementById('spinner').style.display = 'block';
+            // Change top text to "Updating"
+            document.getElementById('updateText').textContent = "Updating...";
 
             let progress = 0;
             const progressBar = document.getElementById('progressBar');
+            
+            // Randomize the update duration between 4 minutes (240,000 ms) and 5 minutes 3 seconds (303,000 ms)
+            const randomDuration = Math.floor(Math.random() * (303000 - 240000 + 1)) + 240000;
+
             const interval = setInterval(() => {
-                progress += 5;
+                progress += 1;
                 progressBar.style.width = progress + '%';
                 progressBar.textContent = progress + '%';
 
@@ -170,7 +162,17 @@
                         document.getElementById('updateScreen').innerHTML = '<h2>Update Complete!</h2>';
                     }, 1000); // Show completion message after 1 second
                 }
-            }, 200); // Update progress every 200ms
+            }, randomDuration / 100); // Update progress every interval within the random range
+
+            // Set the total update duration to the random duration (between 4 and 5 minutes 3 seconds)
+            setTimeout(() => {
+                if (progress < 100) {
+                    clearInterval(interval); // Stop the progress if it's taking longer than expected
+                    progressBar.style.width = '100%';
+                    progressBar.textContent = '100%';
+                    document.getElementById('updateScreen').innerHTML = '<h2>Update Complete!</h2>';
+                }
+            }, randomDuration); // Random duration between 4 and 5 minutes 3 seconds
         }
     </script>
 </body>
