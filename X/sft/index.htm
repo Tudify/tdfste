@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System</title>
+    <title>System Update</title>
     <style>
         body {
             margin: 0;
@@ -31,10 +31,12 @@
             cursor: pointer;
             border: 2px solid white;
             border-radius: 5px;
+            transition: background-color 0.3s;
         }
         .selected {
             background-color: white;
             color: black;
+            box-shadow: 0 0 10px white;
         }
         .progress-container {
             margin-top: 30px;
@@ -87,6 +89,7 @@
         window.addEventListener('load', () => {
             let currentOption = 0;
             const options = document.querySelectorAll('.option');
+            options[currentOption].classList.add('selected');
 
             // Controller-based option selection logic
             window.addEventListener('keydown', (event) => {
@@ -100,7 +103,7 @@
                     }
 
                     options[currentOption].classList.add('selected');
-                } else if (event.key === 'Enter') {
+                } else if (event.key === 'Enter' || event.key === 'x' || event.key === 'a') {
                     if (currentOption === 0) { // OK option
                         startUpdate();
                     } else if (currentOption === 1) { // Power Off option
