@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XOS</title>
+    <title>System</title>
     <style>
         body {
             margin: 0;
@@ -18,12 +18,9 @@
             height: 100vh;
             overflow: hidden;
         }
-        .startup-screen img {
-            max-width: 300px;
-        }
         .update-screen {
-            display: none;
             text-align: center;
+            width: 80%;
         }
         .options {
             margin-top: 20px;
@@ -39,51 +36,103 @@
             background-color: white;
             color: black;
         }
+        .progress-container {
+            margin-top: 30px;
+            width: 100%;
+            background-color: #333;
+            border-radius: 10px;
+            height: 30px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            width: 0;
+            height: 100%;
+            background-color: green;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+            font-weight: bold;
+            border-radius: 10px;
+        }
+        .spinner {
+            margin-top: 20px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
-    <div class="startup-screen" id="startupScreen">
-        <img src="https://tudify.cloud/x.png" alt="Logo">
-    </div>
     <div class="update-screen" id="updateScreen">
         <h2>Do you want to update?</h2>
         <div class="options">
             <div class="option selected" id="ok">OK</div>
             <div class="option" id="powerOff">Power Off</div>
         </div>
+
+        <div class="progress-container" id="progressContainer" style="display: none;">
+            <div class="progress-bar" id="progressBar">0%</div>
+        </div>
+        <div class="spinner" id="spinner" style="display: none;"></div>
     </div>
 
     <script>
         window.addEventListener('load', () => {
-            // Simulate startup screen duration
-            setTimeout(() => {
-                document.getElementById('startupScreen').style.display = 'none';
-                document.getElementById('updateScreen').style.display = 'block';
-            }, 3000); // 3-second startup screen
+            let currentOption = 0;
+            const options = document.querySelectorAll('.option');
+
+            // Controller-based option selection logic
+            window.addEventListener('keydown', (event) => {
+                if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+                    options[currentOption].classList.remove('selected');
+
+                    if (event.key === 'ArrowDown') {
+                        currentOption = (currentOption + 1) % options.length;
+                    } else if (event.key === 'ArrowUp') {
+                        currentOption = (currentOption - 1 + options.length) % options.length;
+                    }
+
+                    options[currentOption].classList.add('selected');
+                } else if (event.key === 'Enter') {
+                    if (currentOption === 0) { // OK option
+                        startUpdate();
+                    } else if (currentOption === 1) { // Power Off option
+                        document.body.style.backgroundColor = 'black';
+                        document.getElementById('updateScreen').style.display = 'none';
+                    }
+                }
+            });
         });
 
-        // Controller-based option selection logic
-        let currentOption = 0;
-        const options = document.querySelectorAll('.option');
+        function startUpdate() {
+            // Hide the options
+            document.querySelector('.options').style.display = 'none';
+            // Show progress bar and spinner
+            document.getElementById('progressContainer').style.display = 'block';
+            document.getElementById('spinner').style.display = 'block';
 
-        window.addEventListener('keydown', (event) => {
-            if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-                options[currentOption].classList.remove('selected');
+            let progress = 0;
+            const progressBar = document.getElementById('progressBar');
+            const interval = setInterval(() => {
+                progress += 5;
+                progressBar.style.width = progress + '%';
+                progressBar.textContent = progress + '%';
 
-                if (event.key === 'ArrowDown') {
-                    currentOption = (currentOption + 1) % options.length;
-                } else if (event.key === 'ArrowUp') {
-                    currentOption = (currentOption - 1 + options.length) % options.length;
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        document.getElementById('updateScreen').innerHTML = '<h2>Update Complete!</h2>';
+                    }, 1000); // Show completion message after 1 second
                 }
-
-                options[currentOption].classList.add('selected');
-            } else if (event.key === 'Enter') {
-                if (currentOption === 1) { // Power Off option
-                    document.body.style.backgroundColor = 'black';
-                    document.getElementById('updateScreen').style.display = 'none';
-                }
-            }
-        });
+            }, 200); // Update progress every 200ms
+        }
     </script>
 </body>
 </html>
