@@ -1,229 +1,55 @@
 <!DOCTYPE html>
-<html lang="en-GB">
-
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Tudify Cloud</title>
-    <meta name="description" content="Cloud solutions for modern businesses.">
-    <link rel="icon" type="image/x-icon" href="https://tudify.co.uk/images/Tudify%20CD.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="https://tudify.co.uk/icon.ico" type="image/x-icon">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@700&display=swap" rel="stylesheet">
-    <meta name="keywords" content="Tudify Cloud, cloud computing, cloud storage, cloud solutions, cloud technology, cloud services, business cloud">
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            font-family: 'DM Sans', sans-serif;
-            background-color: #f0f2f5;
-            color: #333;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Site Offline</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap');
 
-        body {
-            display: flex;
-            flex-direction: column;
-        }
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #000;
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      text-align: center;
+    }
 
-        .content {
-            flex: 1;
-            padding: 20px;
-        }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
+    .logo {
+      width: 80px;
+      height: auto;
+      margin-bottom: 20px;
+    }
 
-        .card {
-            background-color: #ffffff;
-            border-radius: 16px;
-            margin: 15px;
-            width: 620px; /* Increased width to accommodate merging of two cards */
-            height: 450px; /* Increased height to accommodate merging of two cards */
-            display: inline-block;
-            vertical-align: top;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid #ddd;
-            flex: 1 0 600px; /* Adjusted flex basis */
-            max-width: 98%;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 10px 0;
+    }
 
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-support {
-            background: linear-gradient(135deg, rgba(0, 150, 255, 1) 0%, rgba(100, 220, 255, 1) 100%);
-            border-radius: 16px;
-            margin: 15px;
-            width: 300px;
-            height: 400px;
-            display: inline-block;
-            vertical-align: top;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid #ddd;
-            flex: 1 0 280px;
-            max-width: 98%;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .card-support:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-kids {
-            background: linear-gradient(135deg, #ff4e50, #f9d423);
-            border-radius: 16px;
-            margin: 15px;
-            width: 300px;
-            height: 400px;
-            display: inline-block;
-            vertical-align: top;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid #ddd;
-            flex: 1 0 280px;
-            max-width: 98%;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .card-kids:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-content {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-            text-align: left;
-            color: #333;
-            z-index: 1;
-        }
-
-        .card-content h1,
-        .card-content h3,
-        .card-content p,
-        .card-content a {
-            margin: 0;
-            color: #333;
-            text-decoration: none;
-        }
-
-        .footer {
-            width: 96%;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 16px;
-            margin: 10px;
-            text-align: center;
-            border: 1px solid #ddd;
-        }
-
-        .footer a {
-            color: #007acc;
-            text-decoration: none;
-        }
-
-        .footer h3 {
-            margin: 10px 0;
-        }
-
-        .menu-button {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: #007acc;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            font-weight: bold;
-            z-index: 1000;
-            transition: background-color 0.3s ease;
-        }
-
-        .menu-button:hover {
-            background-color: #005f99;
-        }
-
-        @media screen and (max-width: 768px) {
-            .card, .card-support, .card-kids {
-                flex-basis: calc(50% - 30px);
-                max-width: calc(50% - 30px);
-            }
-
-            .card {
-                width: 100%;
-                height: 400px; /* Adjusted height for smaller screens */
-            }
-        }
-
-        @media screen and (max-width: 480px) {
-            .card, .card-support, .card-kids {
-                flex-basis: 100%;
-                max-width: 100%;
-            }
-
-            .card {
-                height: 350px; /* Adjusted height for even smaller screens */
-            }
-        }
-    </style>
+    p {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+  </style>
 </head>
-
 <body>
-    <a href="https://tudify.cloud/menu.html" class="menu-button">Menu</a>
-    <div class="content">
-        <div class="container">
-            <div class="card">
-                <a href="/CloudStorage" aria-label="view info about Tudify Cloud Storage">
-                    <div class="card-content">
-                        <h1>Tudify <b><i>Cloud</i></b> & Storage</h1>
-                        <p>Empowering your business with the cloud and secure data storage.</p>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="content">
-        <div class="container">
-            <div class="card-support">
-                <div class="card-content">
-                    <a href="https://tudify.co.uk/support" aria-label="Go to support">
-                        <h1>Support</h1>
-                        <p>Get help with your cloud services anytime, anywhere.</p>
-                    </a>
-                </div>
-            </div>
-            <div class="card-kids">
-                <div class="card-content">
-                    <a href="/security" aria-label="Go to cloud security">
-                        <h1>Cloud Deploy</h1>
-                        <p>Ensuring your data is safe with top-notch security.</p>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="footer">
-        <h1>Tudify Cloud, a tudify service</h1>
-        <a href="mailto:support@tudify.co.uk">
-            <h3>Email us</h3>
-        </a>
-    </div>
+  <div class="container">
+    <img src="https://tudify.co.uk/logo.svg" alt="Logo" class="logo">
+    <h1>SITE OFFLINE</h1>
+    <p>This isn’t an error, we’re rebuilding.<br>Check back soon!</p>
+  </div>
 </body>
-
 </html>
