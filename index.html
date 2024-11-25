@@ -67,7 +67,7 @@
 
         /* Mobile menu */
         .nav.mobile {
-            display: none;
+            display: none; /* Hidden by default */
             flex-direction: column;
             background-color: #101010;
             position: absolute;
@@ -87,29 +87,35 @@
             background-color: #303030;
         }
 
-        /* Media Queries */
+        /* Default Styles: Show desktop nav, hide mobile nav */
+        .nav {
+            display: flex; /* Visible by default */
+        }
+
+        .nav.mobile {
+            display: none; /* Hidden by default */
+        }
+
+        /* Small Screens: Hide desktop nav, show mobile nav */
         @media (max-width: 768px) {
             .nav {
-                display: none; /* Hide default navigation */
+                display: none; /* Hide desktop navigation */
             }
 
             .menu-icon {
                 display: block; /* Show hamburger icon */
             }
 
-            .nav.mobile.show {
-                display: flex; /* Show mobile menu when toggled */
-            }
-        }
-
-        /* Ensure the desktop nav is visible on large screens */
-        @media (min-width: 769px) {
-            .nav {
-                display: flex; /* Show default navigation */
-            }
-
-            .menu-icon {
-                display: none; /* Hide hamburger icon on larger screens */
+            .nav.mobile {
+                display: flex; /* Show mobile navigation */
+                flex-direction: column;
+                background-color: #101010;
+                position: absolute;
+                top: 100%;
+                right: 0;
+                width: 100%;
+                gap: 0;
+                border-top: 2px solid #303030;
             }
         }
 
@@ -252,16 +258,13 @@
         <h1>Tudify Cloud.</h1>
         <p>a Tudify service</p>
         <p>
-            <a href="https://tudify.co.uk">Tudify Retail</a> |
-            <a href="https://pearweb.webflow.io" target="_blank">pearweb.webflow.io</a>
+            <a href="https://tudify.co.uk">RETAIL</a> | <a href="#">hi :)</a>
         </p>
-        <p>Hello from Telford.</p>
     </footer>
-
     <script>
         function toggleMenu() {
-            const nav = document.querySelector('.nav.mobile');
-            nav.classList.toggle('show');
+            const navMobile = document.querySelector('.nav.mobile');
+            navMobile.style.display = navMobile.style.display === 'flex' ? 'none' : 'flex';
         }
     </script>
 </body>
