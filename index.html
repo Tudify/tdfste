@@ -102,6 +102,17 @@
             }
         }
 
+        /* Ensure the desktop nav is visible on large screens */
+        @media (min-width: 769px) {
+            .nav {
+                display: flex; /* Show default navigation */
+            }
+
+            .menu-icon {
+                display: none; /* Hide hamburger icon on larger screens */
+            }
+        }
+
         .main-container {
             text-align: center;
             padding: 2rem 1rem;
@@ -206,6 +217,11 @@
             <a href="#">Tudify cloud</a>
         </div>
         <div class="menu-icon" onclick="toggleMenu()">☰</div>
+        <nav class="nav">
+            <a href="https://tudify.co.uk">Large scale deployment</a>
+            <a href="/Luna-AI">Small businesses</a>
+            <a href="#">AI branding tools</a>
+        </nav>
         <nav class="nav mobile">
             <a href="https://tudify.co.uk">Large scale deployment</a>
             <a href="/Luna-AI">Small businesses</a>
@@ -227,7 +243,7 @@
                 <p>Tudify Cloud offers world-class speed.</p>
             </div>
             <div class="card black">
-                <h2>Always on guard.</h2>
+                <h2>ALWAYS ON GUARD</h2>
                 <p>Stopping DDoS attacks at the forefront.</p>
             </div>
         </div>
