@@ -32,6 +32,12 @@
             padding: 0.5rem 1rem;
             background-color: #000000;
             border-bottom: 2px solid #303030;
+            position: relative;
+        }
+
+        header .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
         }
 
         header .nav {
@@ -49,6 +55,51 @@
 
         header .nav a:hover {
             background-color: #303030;
+        }
+
+        /* Hamburger menu icon */
+        .menu-icon {
+            display: none;
+            font-size: 1.5rem;
+            color: #fcba03;
+            cursor: pointer;
+        }
+
+        /* Mobile menu */
+        .nav.mobile {
+            display: none;
+            flex-direction: column;
+            background-color: #101010;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 100%;
+            gap: 0;
+            border-top: 2px solid #303030;
+        }
+
+        .nav.mobile a {
+            padding: 1rem;
+            border-bottom: 1px solid #303030;
+        }
+
+        .nav.mobile a:hover {
+            background-color: #303030;
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .nav {
+                display: none; /* Hide default navigation */
+            }
+
+            .menu-icon {
+                display: block; /* Show hamburger icon */
+            }
+
+            .nav.mobile.show {
+                display: flex; /* Show mobile menu when toggled */
+            }
         }
 
         .main-container {
@@ -152,43 +203,50 @@
 <body>
     <header>
         <div class="logo">
-            <a href="#" style="font-size: 1.5rem; font-weight: bold;">Tudify cloud</a>
+            <a href="#">Tudify cloud</a>
         </div>
-        <nav class="nav">
+        <div class="menu-icon" onclick="toggleMenu()">☰</div>
+        <nav class="nav mobile">
             <a href="https://tudify.co.uk">Large scale deployment</a>
-            <a href="/Luna-AI">small buisinesses</a>
+            <a href="/Luna-AI">Small businesses</a>
             <a href="#">AI branding tools</a>
         </nav>
     </header>
     <div class="main-container">
         <div class="banner">
-            <h1>Whether your buisness is big or small...</h1>
-            <a href="#" class="discover-btn">use tudify cloud</a>
+            <h1>Whether your business is big or small...</h1>
+            <a href="#" class="discover-btn">Use Tudify Cloud</a>
         </div>
         <div class="grid">
             <div class="card white">
                 <h2>Stability.</h2>
-                <p>Always rely on tudify to keep your stuff running.</p>
+                <p>Always rely on Tudify to keep your stuff running.</p>
             </div>
             <div class="card pink">
                 <h2>Speed.</h2>
-                <p>Tudify cloud offers world-class speed.</p>
+                <p>Tudify Cloud offers world-class speed.</p>
             </div>
             <div class="card black">
-                <h2>ALWAYS ON GUARD</h2>
-                <p>stopping DDOS attacks at the forefront.</p>
+                <h2>Always on guard.</h2>
+                <p>Stopping DDoS attacks at the forefront.</p>
             </div>
         </div>
     </div>
     <footer>
-        <h1>Tudify cloud.</h1>
-        <p></p>
+        <h1>Tudify Cloud.</h1>
         <p>a Tudify service</p>
         <p>
-            <a href="https://tudify.co.uk">tudify retail</a> |
+            <a href="https://tudify.co.uk">Tudify Retail</a> |
             <a href="https://pearweb.webflow.io" target="_blank">pearweb.webflow.io</a>
         </p>
         <p>Hello from Telford.</p>
     </footer>
+
+    <script>
+        function toggleMenu() {
+            const nav = document.querySelector('.nav.mobile');
+            nav.classList.toggle('show');
+        }
+    </script>
 </body>
 </html>
