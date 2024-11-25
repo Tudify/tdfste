@@ -87,33 +87,24 @@
             background-color: #303030;
         }
 
-/* Default Styles: Show desktop nav, hide mobile nav */
-.nav {
-    display: flex; /* Desktop nav visible by default */
-}
+        /* Default Styles: Show desktop nav, hide mobile nav */
+        .nav {
+            display: flex; /* Visible by default */
+        }
 
-.nav.mobile {
-    display: none; /* Mobile nav hidden by default */
-}
+        .nav.mobile {
+            display: none; /* Hidden by default */
+        }
 
-/* Small Screens: Hide desktop nav, show mobile nav */
-@media (max-width: 768px) {
-    .nav {
-        display: none; /* Hide desktop navigation */
-    }
+        /* Small Screens: Hide desktop nav, show mobile nav */
+        @media (max-width: 768px) {
+            .nav {
+                display: none; /* Hide desktop navigation */
+            }
 
-    .nav.mobile {
-        display: flex; /* Show mobile navigation */
-        flex-direction: column;
-        background-color: #101010;
-        position: absolute;
-        top: 100%;
-        right: 0;
-        width: 100%;
-        gap: 0;
-        border-top: 2px solid #303030;
-    }
-}
+            .menu-icon {
+                display: block; /* Show hamburger icon */
+            }
 
             .nav.mobile {
                 display: flex; /* Show mobile navigation */
@@ -267,7 +258,7 @@
         <h1>Tudify Cloud.</h1>
         <p>a Tudify service</p>
         <p>
-            <a href="https://tudify.co.uk">RETAIL</a> | <a href="#">hi :)</a>
+            <a href="https://tudify.co.uk">Terms of use</a> | <a href="#">Contact</a>
         </p>
     </footer>
     <script>
