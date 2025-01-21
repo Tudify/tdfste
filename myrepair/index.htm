@@ -81,22 +81,19 @@
         }
 
         function parseLog(content) {
-            // Remove RTF formatting (anything before the log data)
-            const rtfRemoveRegex = /\\rtf1[^\}]*\}/g;
-            content = content.replace(rtfRemoveRegex, ''); // Remove RTF data
-
-            // Clean up any extra whitespace or newlines
-            content = content.replace(/\s+/g, ' ');
-
-            // Regular expression to find the log data (TDF_LGFILE)
-            const logRegex = /\{TDF_LGFILE,Device_PWR_on=(\d+),Unsfe_PWR_off=(\d+),DVE_issue=(NAND_no|OScorrupt|SettingsCorrupt|NoOS)\}/;
+            const logRegex = /\{TDF_LGFILE,Device_PWR_on=(\d+),Unsfe_PWR_off=(\d+),DVE_issue=(NAND_no|OScorrupt|SettingsCorrupt|NoOS),REASON=([A-Za-z0-9_]+)\}/;
             const match = content.match(logRegex);
 
             if (match) {
+                let issueText = match[3];
+                if (issueText === "SettingsCorrupt") {
+                    issueText = "Device Settings are corrupted";
+                }
                 document.getElementById('log-output').innerHTML = `
                     <p><strong>Device Power On Count:</strong> ${match[1]}</p>
                     <p><strong>Unsafe Power Off Count:</strong> ${match[2]}</p>
-                    <p><strong>Device Issue:</strong> ${match[3]}</p>
+                    <p><strong>Device Issue:</strong> ${issueText}</p>
+                    <p><strong>Reason:</strong> ${match[4]}</p>
                 `;
             } else {
                 document.getElementById('log-output').innerHTML = '<p>Invalid log file format.</p>';
@@ -138,7 +135,7 @@
         </div>
         <div id="devices" class="tab-content">
             <h1>No Devices Detected.</h1>
-            <p>you must use a USBC cable with data lines and a supported phone.</p>
+            <p>You must use a USB-C cable with data lines and a supported phone.</p>
         </div>
         <div id="diagnosis" class="tab-content">
             <h1>Diagnosis</h1>
