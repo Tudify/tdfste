@@ -89,11 +89,14 @@
                 if (issueText === "SettingsCorrupt") {
                     issueText = "Device Settings are corrupted";
                 }
+                if (issueText === "OScorrupt") {
+                    issueText = "Operating System Corrupt or not found";
+                }
                 document.getElementById('log-output').innerHTML = `
                     <p><strong>Device Power On Count:</strong> ${match[1]}</p>
                     <p><strong>Unsafe Power Off Count:</strong> ${match[2]}</p>
                     <p><strong>Device Issue:</strong> ${issueText}</p>
-                    <p><strong>Reason:</strong> ${match[4]}</p>
+                    <p><strong>Reason of issue:</strong> ${match[4]}</p>
                 `;
             } else {
                 document.getElementById('log-output').innerHTML = '<p>Invalid log file format.</p>';
