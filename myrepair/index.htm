@@ -48,13 +48,7 @@
             text-align: center;
             padding: 10px;
         }
-        .no-device {
-            margin-bottom: 10px;
-            background-color: black;
-            padding: 5px;
-            border-radius: 5px;
-        }
-        .sign-in {
+        .no-device, .sign-in {
             background-color: black;
             padding: 5px;
             border-radius: 5px;
@@ -81,25 +75,35 @@
         }
 
         function parseLog(content) {
-            const logRegex = /\{TDF_LGFILE,Device_PWR_on=(\d+),Unsfe_PWR_off=(\d+),DVE_issue=(NAND_no|OScorrupt|SettingsCorrupt|NoOS),REASON=([A-Za-z0-9_]+)\}/;
+            const logRegex = /\{TDF_LGFILE,Device_PWR_on=(\d+),Unsfe_PWR_off=(\d+),DVE_issue=([A-Za-z_]+),REASON=([A-Za-z0-9_]+)\}/;
             const match = content.match(logRegex);
 
             if (match) {
                 let issueText = match[3];
-                if (issueText === "SettingsCorrupt") {
-                    issueText = "Device Settings are corrupted";
-                }
-                if (issueText === "OScorrupt") {
-                    issueText = "Operating System Corrupt or not found";
-                }
-                if (issueText === "UpdateFail") {
-                    issueText = "An update to the Operating System failed and the OS must be restored.";
-                }
+                let reasonText = match[4];
+
+                const issueMap = {
+                    "SettingsCorrupt": "Device Settings are corrupted",
+                    "OScorrupt": "Operating System Corrupt or not found",
+                    "UpdateFail": "An update to the Operating System failed and the OS must be restored.",
+                    "NoOS": "No Operating System detected",
+                    "NAND_no": "NAND storage not detected"
+                };
+
+                const reasonMap = {
+                    "NND": "NAND Issue Detected",
+                    "NoSt": "No Safe Telecom Channel",
+                    "NAND_degrade": "NAND Storage is Degraded"
+                };
+
+                if (issueMap[issueText]) issueText = issueMap[issueText];
+                if (reasonMap[reasonText]) reasonText = reasonMap[reasonText];
+
                 document.getElementById('log-output').innerHTML = `
                     <p><strong>Device Power On Count:</strong> ${match[1]}</p>
                     <p><strong>Unsafe Power Off Count:</strong> ${match[2]}</p>
                     <p><strong>Device Issue:</strong> ${issueText}</p>
-                    <p><strong>Reason of issue:</strong> ${match[4]}</p>
+                    <p><strong>Reason of Issue:</strong> ${reasonText}</p>
                 `;
             } else {
                 document.getElementById('log-output').innerHTML = '<p>Invalid log file format.</p>';
@@ -111,7 +115,7 @@
             if (!file) return;
 
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 parseLog(e.target.result);
             };
             reader.readAsText(file);
@@ -137,7 +141,8 @@
     <div class="content">
         <div id="home" class="tab-content active">
             <h1>Welcome to Tudify MyRepair</h1>
-            <p>Tudify ❤️ technicians </br> Keeping our repair community strong is of great value to us, help us keep it that way.</p>
+            <p>Tudify ❤️ technicians</p>
+            <p>Keeping our repair community strong is of great value to us, help us keep it that way.</p>
         </div>
         <div id="devices" class="tab-content">
             <h1>No Devices Detected.</h1>
