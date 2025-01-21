@@ -79,11 +79,19 @@
             });
             document.getElementById(tabId).classList.add('active');
         }
-        
+
         function parseLog(content) {
-            content = content.replace(/\s+/g, ''); // Remove all spaces
+            // Remove RTF formatting (anything before the log data)
+            const rtfRemoveRegex = /\\rtf1[^\}]*\}/g;
+            content = content.replace(rtfRemoveRegex, ''); // Remove RTF data
+
+            // Clean up any extra whitespace or newlines
+            content = content.replace(/\s+/g, ' ');
+
+            // Regular expression to find the log data (TDF_LGFILE)
             const logRegex = /\{TDF_LGFILE,Device_PWR_on=(\d+),Unsfe_PWR_off=(\d+),DVE_issue=(NAND_no|OScorrupt|SettingsCorrupt|NoOS)\}/;
             const match = content.match(logRegex);
+
             if (match) {
                 document.getElementById('log-output').innerHTML = `
                     <p><strong>Device Power On Count:</strong> ${match[1]}</p>
@@ -94,11 +102,11 @@
                 document.getElementById('log-output').innerHTML = '<p>Invalid log file format.</p>';
             }
         }
-        
+
         function handleFileUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
-            
+
             const reader = new FileReader();
             reader.onload = function(e) {
                 parseLog(e.target.result);
