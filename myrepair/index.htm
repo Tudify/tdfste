@@ -71,6 +71,16 @@
         .tab-content.active {
             display: block;
         }
+        .light-mode {
+            background-color: white;
+            color: black;
+        }
+        .light-mode .sidebar {
+            background-color: #ddd;
+        }
+        .light-mode .sidebar ul li a {
+            color: black;
+        }
     </style>
     <script>
         function showTab(tabId) {
@@ -78,6 +88,33 @@
                 tab.classList.remove('active');
             });
             document.getElementById(tabId).classList.add('active');
+        }
+        function toggleLightMode() {
+            document.body.classList.toggle('light-mode');
+        }
+        function uploadLog(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const logData = e.target.result;
+                    parseLog(logData);
+                };
+                reader.readAsText(file);
+            }
+        }
+        function parseLog(log) {
+            const regex = /{TDF_LGFILE, Device_PWR_on= (\d+), Unsfe_PWR_off= (\d+), DVE_issue= (NAND_no|OScorrupt|SettingsCorrupt|NoOS)}/;
+            const match = log.match(regex);
+            if (match) {
+                document.getElementById('log-output').innerHTML = `
+                    <p><strong>Device Power On:</strong> ${match[1]}</p>
+                    <p><strong>Unsafe Power Off:</strong> ${match[2]}</p>
+                    <p><strong>Device Issue:</strong> ${match[3]}</p>
+                `;
+            } else {
+                document.getElementById('log-output').innerText = 'Invalid log file format.';
+            }
         }
     </script>
 </head>
@@ -95,6 +132,7 @@
         <div class="sidebar-footer">
             <div class="no-device">No device connected</div>
             <div class="sign-in">Sign In</div>
+            <button onclick="toggleLightMode()">Toggle Light Mode</button>
         </div>
     </div>
     <div class="content">
@@ -104,15 +142,15 @@
         </div>
         <div id="devices" class="tab-content">
             <h1>No Devices Detected.</h1>
-            <p>you must use a USBC cable with data lines and a supported phone.</p>
+            <p>You must use a USB-C cable with data lines and a supported phone.</p>
         </div>
         <div id="diagnosis" class="tab-content">
             <h1>Diagnosis</h1>
-            <p>when connected, your device's TDF.log file will be here.</p>
+            <input type="file" accept=".log" onchange="uploadLog(event)">
+            <div id="log-output"></div>
         </div>
         <div id="setup" class="tab-content">
             <h1>Setup</h1>
-            <p></p>
         </div>
     </div>
 </body>
