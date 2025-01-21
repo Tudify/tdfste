@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyRepair - Tudify</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'DM Sans', sans-serif;
+            color: white;
+        }
+        body {
+            display: flex;
+            background-color: black;
+        }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #333;
+            padding: 20px;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .sidebar h2 {
+            margin-bottom: 20px;
+        }
+        .sidebar ul {
+            list-style: none;
+            flex-grow: 1;
+        }
+        .sidebar ul li {
+            margin: 15px 0;
+        }
+        .sidebar ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 18px;
+            display: block;
+        }
+        .sidebar-footer {
+            text-align: center;
+            padding: 10px;
+        }
+        .no-device {
+            margin-bottom: 10px;
+            background-color: red;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        .sign-in {
+            background-color: blue;
+            padding: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .content {
+            margin-left: 270px;
+            padding: 20px;
+            width: calc(100% - 270px);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+    <script>
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+        }
+    </script>
+</head>
+<body>
+    <div class="sidebar">
+        <div>
+            <h2>MyRepair</h2>
+            <ul>
+                <li><a href="#" onclick="showTab('home')">Home</a></li>
+                <li><a href="#" onclick="showTab('devices')">Devices</a></li>
+                <li><a href="#" onclick="showTab('diagnosis')">Diagnosis</a></li>
+                <li><a href="#" onclick="showTab('setup')">Setup</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-footer">
+            <div class="no-device">No device connected</div>
+            <div class="sign-in">Sign In</div>
+        </div>
+    </div>
+    <div class="content">
+        <div id="home" class="tab-content active">
+            <h1>Welcome to Tudify MyRepair</h1>
+            <p>We provide top-quality repairs for all your devices.</p>
+        </div>
+        <div id="devices" class="tab-content">
+            <h1>Supported Devices</h1>
+            <p>We repair a wide range of devices including phones, laptops, and more.</p>
+        </div>
+        <div id="diagnosis" class="tab-content">
+            <h1>Diagnosis</h1>
+            <p>Get a professional diagnosis for your device issues.</p>
+        </div>
+        <div id="setup" class="tab-content">
+            <h1>Setup Services</h1>
+            <p>We assist with setting up and configuring your devices.</p>
+        </div>
+    </div>
+</body>
+</html>
