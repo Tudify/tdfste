@@ -71,6 +71,22 @@
         .tab-content.active {
             display: block;
         }
+        .light-mode {
+            background-color: white;
+            color: black;
+        }
+        .diagnosis-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+            display: block;
+        }
+        .file-upload {
+            margin-top: 10px;
+        }
     </style>
     <script>
         function showTab(tabId) {
@@ -79,26 +95,58 @@
             });
             document.getElementById(tabId).classList.add('active');
         }
-        
-        function parseLog(content) {
-            content = content.replace(/\s+/g, ''); // Remove all spaces
-            const logRegex = /\{TDF_LGFILE,Device_PWR_on=(\d+),Unsfe_PWR_off=(\d+),DVE_issue=(NAND_no|OScorrupt|SettingsCorrupt|NoOS)\}/;
-            const match = content.match(logRegex);
-            if (match) {
-                document.getElementById('log-output').innerHTML = `
-                    <p><strong>Device Power On Count:</strong> ${match[1]}</p>
-                    <p><strong>Unsafe Power Off Count:</strong> ${match[2]}</p>
-                    <p><strong>Device Issue:</strong> ${match[3]}</p>
-                `;
-            } else {
-                document.getElementById('log-output').innerHTML = '<p>Invalid log file format.</p>';
-            }
+
+        function toggleLightMode() {
+            document.body.classList.toggle('light-mode');
         }
-        
+
+        function parseLog(logContent) {
+            // Remove spaces entirely before processing
+            logContent = logContent.replace(/\s+/g, '');
+
+            // Match log format
+            const logPattern = /{TDF_LGFILE,Device_PWR_on=(\d+),Unsfe_PWR_off=(\d+),DVE_issue=(NAND_no|OScorrupt|SettingsCorrupt|NoOS)}/;
+            const match = logContent.match(logPattern);
+
+            if (!match) {
+                document.getElementById('log-result').innerHTML = "<p style='color: red;'>Invalid log file format.</p>";
+                return;
+            }
+
+            const devicePowerOn = match[1];
+            const unsafePowerOff = match[2];
+            const deviceIssue = match[3];
+
+            let issueDescription = "";
+            switch (deviceIssue) {
+                case "NAND_no":
+                    issueDescription = "NAND failure detected.";
+                    break;
+                case "OScorrupt":
+                    issueDescription = "Operating System corruption detected.";
+                    break;
+                case "SettingsCorrupt":
+                    issueDescription = "Device settings corruption detected.";
+                    break;
+                case "NoOS":
+                    issueDescription = "No operating system found on the device.";
+                    break;
+                default:
+                    issueDescription = "Unknown issue.";
+            }
+
+            document.getElementById('log-result').innerHTML = `
+                <h2>Log Analysis</h2>
+                <p><strong>Device Power On:</strong> ${devicePowerOn} times</p>
+                <p><strong>Unsafe Power Offs:</strong> ${unsafePowerOff} times</p>
+                <p><strong>Detected Issue:</strong> ${issueDescription}</p>
+            `;
+        }
+
         function handleFileUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
-            
+
             const reader = new FileReader();
             reader.onload = function(e) {
                 parseLog(e.target.result);
@@ -119,6 +167,7 @@
             </ul>
         </div>
         <div class="sidebar-footer">
+            <button onclick="toggleLightMode()">Toggle Light Mode</button>
             <div class="no-device">No device connected</div>
             <div class="sign-in">Sign In</div>
         </div>
@@ -126,20 +175,20 @@
     <div class="content">
         <div id="home" class="tab-content active">
             <h1>Welcome to Tudify MyRepair</h1>
-            <p>Tudify ❤️ technicians </br> Keeping our repair community strong is of great value to us, help us keep it that way.</p>
+            <p>Tudify ❤️ technicians</p>
+            <p>Keeping our repair community strong is of great value to us, help us keep it that way.</p>
         </div>
         <div id="devices" class="tab-content">
             <h1>No Devices Detected.</h1>
-            <p>you must use a USBC cable with data lines and a supported phone.</p>
+            <p>You must use a USB-C cable with data lines and a supported phone.</p>
         </div>
         <div id="diagnosis" class="tab-content">
             <h1>Diagnosis</h1>
-            <input type="file" accept=".log" onchange="handleFileUpload(event)">
-            <div id="log-output"></div>
+            <input type="file" class="file-upload" onchange="handleFileUpload(event)">
+            <div id="log-result"></div>
         </div>
         <div id="setup" class="tab-content">
             <h1>Setup</h1>
-            <p></p>
         </div>
     </div>
 </body>
