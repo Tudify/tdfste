@@ -92,6 +92,9 @@
                 if (issueText === "OScorrupt") {
                     issueText = "Operating System Corrupt or not found";
                 }
+                if (issueText === "UpdateFail") {
+                    issueText = "An update to the Operating System failed and the OS must be restored.";
+                }
                 document.getElementById('log-output').innerHTML = `
                     <p><strong>Device Power On Count:</strong> ${match[1]}</p>
                     <p><strong>Unsafe Power Off Count:</strong> ${match[2]}</p>
